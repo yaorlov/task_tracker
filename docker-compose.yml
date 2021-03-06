@@ -1,0 +1,25 @@
+version: "3.5"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:13.2
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      PSQL_TRUST_LOCALNET: 'true'
+      ENCODING: 'UTF8'
+    volumes:
+       - postgres-storage:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - default
+      - shared
+
+networks:
+  shared:
+    name: shared # forces the network name to avoid compose prepending the project name
+
+volumes:
+  postgres-storage:
