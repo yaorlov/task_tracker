@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TasksController < ApplicationController
-  before_action :set_task, only: [:in_progress, :done]
+  before_action :set_task, only: %i[in_progress done]
 
   def index
     @tasks = Task.all.includes(:assignee)

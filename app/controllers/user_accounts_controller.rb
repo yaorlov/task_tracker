@@ -10,6 +10,6 @@ class UserAccountsController < ApplicationController
   private
 
   def set_user_account
-    @user_account = UserAccount.find(params[:user_account_id])
+    @user_account = UserAccount.find(params[:id])
   end
 end
