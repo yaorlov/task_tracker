@@ -1,5 +1,8 @@
 # README
 
+[Event Storming](https://docs.google.com/spreadsheets/d/1ptdPEHeSkVTRmEae9KwsrnE5ED-u1bK0OwC79hWoOTg/edit?usp=sharing)
+[Data Model](https://miro.com/app/board/o9J_lQoNpNI=/)
+
 ## How to run the application
 
 1. Run `docker-compose up` to run Postgres
