@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   #   end
   # end
   get '/users/:user_account_id/tasks', to: 'user_accounts#tasks'
+  patch '/tasks/:task_id/in_progress', to: 'tasks#in_progress'
+  patch '/tasks/:task_id/done', to: 'tasks#done'
 end
