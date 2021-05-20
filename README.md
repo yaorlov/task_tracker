@@ -1,24 +1,11 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## How to run the application
 
-Things you may want to cover:
+1. Run `docker-compose up` to run Postgres
+2. Run `bundle exec rails s` to run the app
 
-* Ruby version
+## Database setup
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Run `bundle exec rails db:create db:migrate` to create the database and the database tables
+Run `bundle exec rails db:seed` to create users with tasks
