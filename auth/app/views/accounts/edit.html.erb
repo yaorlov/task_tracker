@@ -1,0 +1,9 @@
+<%= form_with model: @account do |form| %>
+  <%= form.label :full_name %>
+  <%= form.text_field :full_name, value: @account.full_name %>
+  <%= form.label :position %>
+  <%= form.text_field :position, value: @account.position %>
+  <%= form.label :role %>
+  <%= form.select :role, Account.roles.keys.map(&:humanize).zip(Account.roles.keys), selected: @account.role %>
+  <%= form.submit %>
+<% end %>
