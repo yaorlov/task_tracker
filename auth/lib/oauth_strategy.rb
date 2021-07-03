@@ -1,23 +1,25 @@
+# frozen_string_literal: true
+
 require 'omniauth-oauth2'
 
 class OAuthStrategy < OmniAuth::Strategies::OAuth2
   option :name, :oauth
 
   option :client_options, {
-    :site => "http://localhost:3000/oauth/authorize",
-    :authorize_url => "http://localhost:3000/oauth/authorize"
+    site: 'http://localhost:3000/oauth/authorize',
+    authorize_url: 'http://localhost:3000/oauth/authorize'
   }
 
-  uid { raw_info["public_id"] }
+  uid { raw_info['public_id'] }
 
   info do
     {
-      :email => raw_info["email"],
-      :full_name => raw_info["full_name"],
-      :position => raw_info["position"],
-      :active => raw_info["active"],
-      :role => raw_info["role"],
-      :public_id => raw_info["public_id"]
+      email: raw_info['email'],
+      full_name: raw_info['full_name'],
+      position: raw_info['position'],
+      active: raw_info['active'],
+      role: raw_info['role'],
+      public_id: raw_info['public_id']
     }
   end
 

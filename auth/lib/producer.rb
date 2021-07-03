@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Producer
   def self.call(event, topic:)
     Rails.logger.info("\n==========")

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class AccountsController < ApplicationController
-  before_action :set_account, only: [:show, :edit, :update, :destroy]
+  before_action :set_account, only: %i[edit update destroy]
 
   before_action :authenticate_account!
 
@@ -11,8 +13,10 @@ class AccountsController < ApplicationController
 
   # GET /accounts/current.json
   def current
+    current_doorkeeper_account = Account.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+
     respond_to do |format|
-      format.json { render :json => current_doorkeeper_account }
+      format.json { render json: current_doorkeeper_account }
     end
   end
 
@@ -21,9 +25,10 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1
   # PATCH/PUT /accounts/1.json
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update
     respond_to do |format|
-      new_role = @account.role != account_params[:role] ? account_params[:role] : nil
+      new_role = @account.role == account_params[:role] ? nil : account_params[:role]
 
       if @account.update(account_params)
         # ----------------------------- produce event -----------------------
@@ -55,13 +60,14 @@ class AccountsController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # DELETE /accounts/1
   # DELETE /accounts/1.json
   #
   # in DELETE action, CUD event
   def destroy
-    @account.update(active: false, disabled_at: Time.now)
+    @account.update(active: false, disabled_at: Time.zone.now)
 
     # ----------------------------- produce event -----------------------
     event = {
@@ -78,14 +84,6 @@ class AccountsController < ApplicationController
   end
 
   private
-
-  def current_doorkeeper_account
-    if doorkeeper_token
-      Account.find(doorkeeper_token.resource_owner_id)
-    else
-      super
-    end
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_account

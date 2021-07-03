@@ -1,0 +1,22 @@
+require:
+  - rubocop-rails
+  - rubocop-performance
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'bin/*'
+    - 'db/migrate/*'
+    - 'node_modules/**/*'
+    - 'db/schema.rb'
+
+Layout/LineLength:
+  Exclude:
+    - 'config/initializers/*'
+
+Naming/InclusiveLanguage:
+  Exclude:
+    - 'config/initializers/*'
+
+Style/Documentation:
+  Enabled: false
