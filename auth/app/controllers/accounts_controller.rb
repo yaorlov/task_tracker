@@ -3,7 +3,7 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[edit update destroy]
 
-  before_action :authenticate_account!
+  before_action :authenticate_account!, except: [:current]
 
   # GET /accounts
   # GET /accounts.json

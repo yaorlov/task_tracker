@@ -10,7 +10,13 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
+  <body class="flex-column">
+    <% if session[:account] %>
+      <div class="d-flex flex-row w-100 justify-content-end">
+        <%= link_to('Log out', logout_path, style: 'float: right') %>
+      </div>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>

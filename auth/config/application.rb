@@ -17,7 +17,7 @@ require 'action_mailer/railtie'
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
-require './lib/oauth_strategy'
+require './lib/omni_auth/strategies/keepa'
 require './lib/producer'
 
 # Require the gems listed in Gemfile, including any gems
@@ -39,5 +39,8 @@ module Auth
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # use structure.sql instead of schema.rb
+    config.active_record.schema_format = :sql
   end
 end

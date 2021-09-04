@@ -2,7 +2,6 @@
 
 class PagesController < ApplicationController
   def home
-    # TODO: change logic after auth implementation
-    @current_user = UserAccount.first
+    @current_account = session[:account]
   end
 end

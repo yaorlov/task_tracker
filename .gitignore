@@ -36,3 +36,7 @@
 /*/.yarn-integrity
 
 /*/.gems
+
+# Ingore env vars
+auth/.env.development
+task_tracking/.env.development

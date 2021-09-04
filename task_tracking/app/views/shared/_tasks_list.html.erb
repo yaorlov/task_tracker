@@ -1,15 +1,15 @@
-<ul>
+<ul class="list-group">
   <% @tasks.each do |task| %>
-    <li>
+    <li class="list-group-item">
       <p>Description: <%= task.description %></p>
 
       <p>Status: <%= task.status.humanize %></p>
 
+      <p>Assignee: <%= task.assignee.full_name %></p>
+
       <%= form_with url: "/tasks/#{task.id}/#{task.done? ? 'in_progress' : 'done'}", method: :patch do |form| %>
         <%= form.submit "Move to \"#{task.done? ? 'In progress' : 'Done'}\"" %>
       <% end %>
-
-      <p>Assignee: <%= task.assignee.full_name %></p>
     </li>
   <% end %>
 </ul>

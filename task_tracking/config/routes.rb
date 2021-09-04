@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root 'pages#home'
 
   resources :tasks, only: [:index]
-  resources :user_accounts, as: :user, path: 'user', only: [] do
+  resources :accounts, only: [] do
     member do
       get :tasks
     end
@@ -12,4 +12,8 @@ Rails.application.routes.draw do
 
   patch '/tasks/:task_id/in_progress', to: 'tasks#in_progress'
   patch '/tasks/:task_id/done', to: 'tasks#done'
+
+  get '/login', to: 'oauth_sessions#new'
+  get '/logout', to: 'oauth_sessions#destroy'
+  get '/auth/:provider/callback', to: 'oauth_sessions#create'
 end

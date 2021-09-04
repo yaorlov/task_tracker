@@ -23,5 +23,5 @@ localhost:3000/oauth/applications - oauth app managment
 
 task_tracking service
 localhost:5000 - main
-# localhost:5000/auth/login - oauth login
+localhost:5000/login - oauth login
 ```

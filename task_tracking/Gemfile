@@ -30,6 +30,13 @@ gem 'jbuilder', '~> 2.7'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
+# Bootstrap styles
+gem 'bootstrap', '~> 5.1.0'
+
+# Authentication
+gem 'omniauth-oauth2'
+gem 'omniauth-rails_csrf_protection'
+
 group :development, :test do
   gem 'dotenv-rails'
   gem 'factory_bot_rails'

@@ -1,7 +1,11 @@
 class AddRoleToAccounts < ActiveRecord::Migration[6.1]
   def up
     execute <<~SQL
-      CREATE TYPE account_roles AS ENUM ('admin', 'manager', 'finance', 'worker');
+      DO $$ BEGIN
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'foo_bar_enum_status') THEN
+          CREATE TYPE account_roles AS ENUM ('admin', 'manager', 'finance', 'worker');
+        END IF;
+      END $$;
     SQL
     add_column :accounts, :role, :account_roles, null: false, default: 'worker'
   end
@@ -9,7 +13,7 @@ class AddRoleToAccounts < ActiveRecord::Migration[6.1]
   def down
     remove_column :accounts, :role
     execute <<~SQL
-      DROP TYPE account_roles;
+      DROP TYPE IF EXISTS account_roles;
     SQL
   end
 end
