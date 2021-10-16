@@ -17,7 +17,6 @@ require 'action_mailer/railtie'
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
-require './lib/omni_auth/strategies/keepa'
 require './lib/producer'
 
 # Require the gems listed in Gemfile, including any gems

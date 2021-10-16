@@ -5,7 +5,7 @@ class UpdateUserAccounts < ActiveRecord::Migration[6.1]
     rename_column :tasks, :user_account_id, :account_id
     execute <<~SQL
       DO $$ BEGIN
-        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'foo_bar_enum_status') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'account_roles') THEN
           CREATE TYPE account_roles AS ENUM ('admin', 'manager', 'finance', 'worker');
         END IF;
       END $$;

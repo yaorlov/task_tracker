@@ -21,6 +21,15 @@ CREATE TYPE public.account_roles AS ENUM (
 );
 
 
+--
+-- Name: auth_identity_providers; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.auth_identity_providers AS ENUM (
+    'keepa'
+);
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
