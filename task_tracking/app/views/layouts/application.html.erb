@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TaskTracker</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body class="flex-column">
+    <% if session[:account] %>
+      <div class="d-flex flex-row w-100 justify-content-end">
+        <%= link_to('Log out', logout_path, style: 'float: right') %>
+      </div>
+    <% end %>
+
+    <%= yield %>
+  </body>
+</html>

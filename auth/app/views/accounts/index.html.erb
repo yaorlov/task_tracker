@@ -1,0 +1,27 @@
+<h1>Accounts</h1>
+<table>
+  <tr>
+    <th>id</th>
+    <th>email</th>
+    <th>public id</th>
+    <th>full name</th>
+    <th>role</th>
+    <th>position</th>
+    <th>active</th>
+  </tr>
+
+  <% @accounts.each do |account| %>
+    <tr>
+      <td><%= account.id %></td>
+      <td><%= account.email %></td>
+      <td><%= account.public_id %></td>
+      <td><%= account.full_name %></td>
+      <td><%= account.role %></td>
+      <td><%= account.position %></td>
+      <td><%= account.active %></td>
+      <td><%= link_to('edit', edit_account_path(account)) %></td>
+      <td><%= link_to('delete', account, method: :delete, data: { confirm: 'Are you sure?' }) %></td>
+    </tr>
+  <% end %>
+</table>
+
