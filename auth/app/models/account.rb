@@ -14,6 +14,14 @@ class Account < ApplicationRecord
   }
 
   after_create do
+    producer = WaterDrop::Producer.new do |config|
+      config.deliver = true
+      config.kafka = {
+        'bootstrap.servers': 'localhost:9092',
+        'request.required.acks': 1
+      }
+    end
+
     event = {
       event_name: 'AccountCreated',
       data: {
@@ -21,6 +29,8 @@ class Account < ApplicationRecord
       }
     }
 
-    Producer.call(event.to_json, topic: 'accounts-stream')
+    producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
+
+    producer.close
   end
 end
