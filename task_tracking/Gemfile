@@ -40,6 +40,9 @@ gem 'omniauth-rails_csrf_protection'
 # dry-rb gems
 gem 'dry-monads'
 
+# Kafka gems
+gem 'karafka', '~> 1.4'
+
 group :development, :test do
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
