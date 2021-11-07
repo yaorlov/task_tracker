@@ -24,9 +24,7 @@ class Account < ApplicationRecord
 
     event = {
       event_name: 'AccountCreated',
-      data: {
-        public_id: public_id
-      }
+      data: self.reload.attributes.slice('public_id', 'email', 'role', 'full_name')
     }
 
     producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')

@@ -41,19 +41,19 @@ class KarafkaApp < Karafka::App
   # )
 
   consumer_groups.draw do
-    # topic :example do
-    #   consumer ExampleConsumer
+    # topic :notifications do
+    #   consumer NotificationsConsumer
     # end
 
-    # consumer_group :bigger_group do
-    #   topic :test do
-    #     consumer TestConsumer
-    #   end
-    #
-    #   topic :test2 do
-    #     consumer Test2Consumer
-    #   end
-    # end
+    consumer_group :real_work do
+      topic 'accounts-stream' do
+        consumer AccountChangesConsumer
+      end
+    
+      topic 'accounts' do
+        consumer AccountChangesConsumer
+      end
+    end
   end
 end
 
