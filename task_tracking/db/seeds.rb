@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-FactoryBot.create_list(:account, 5, with_tasks: true)
+Account.where.missing(:auth_identities).find_each do |account|
+  FactoryBot.create_list(:task, 3, assignee: account)
+end

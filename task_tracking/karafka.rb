@@ -46,10 +46,12 @@ class KarafkaApp < Karafka::App
     # end
 
     consumer_group :real_work do
+      # CUD events
       topic 'accounts-stream' do
         consumer AccountChangesConsumer
       end
     
+      # Business events
       topic 'accounts' do
         consumer AccountChangesConsumer
       end

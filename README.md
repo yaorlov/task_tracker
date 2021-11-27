@@ -4,24 +4,29 @@
 [Data Model](https://miro.com/app/board/o9J_lQoNpNI=/)
 [Domains and Communications](https://miro.com/app/board/o9J_lQoaHbE=/)
 
-## How to run the application
+## How to run the applications
 
-1. Run `docker-compose up` to run Postgres
-2. Run `bundle exec rails s` to run the app
+1. Run `docker-compose up` to run Postgres and Kafka
+2. Run `bundle exec rails s` from `auth` dir to start the Auth service
+3. Run `foreman start` from `task_tracking` dir to start Task Tracking service with Kafka consumer
 
-## Database setup
+## Databases setup
 
-Run `bundle exec rails db:create db:migrate` to create the database and the database tables
-Run `bundle exec rails db:seed` to create users with tasks
+From `auth` dir:
+1. Run `be rails db:drop db:create db:migrate db:seed` to create and seed the database
+From `task_tracking` dir:
+1. Run `be rails db:create db:migrate` to create the database
+2. Start Karafka (`bundle exec karafka s`) to consume accounts stream and create accounts in Task Tracking service DB
+3. Run `be rails db:seed` to create tasks for every account
 
 ## Routes
 
 ```
-auth service
-localhost:3000 - main
-localhost:3000/oauth/applications - oauth app managment
+Auth service
+http://localhost:3000 - main
+http://localhost:3000/oauth/applications - oauth app managment
 
-task_tracking service
-localhost:5000 - main
-localhost:5000/login - oauth login
+Task Tracking service
+http://localhost:5000 - main
+http://localhost:5000/login - oauth login
 ```
