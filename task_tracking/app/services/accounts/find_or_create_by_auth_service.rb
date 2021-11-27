@@ -5,15 +5,23 @@ module Accounts
     include Dry::Monads[:result, :do, :try]
 
     def call(provider:, auth_data:)
-      account = find_by_auth(provider, auth_data)
-      return Success(account) if account
+      # if account was created with auth_entity
+      account_by_auth = find_by_auth(provider, auth_data)
+      return Success(account_by_auth) if account_by_auth
 
+      # if account was created without auth_entity (on 'AccountCreated' event)
+      account_by_email = Account.find_by(email: auth_data['info']['email'])
+      if account_by_email
+        yield create_auth_identity!(auth_data, provider, account_by_email)
+        return Success(account_by_email)
+      end
+
+      # if account does not exist
       ActiveRecord::Base.transaction do
         account = yield create_account!(auth_data)
         yield create_auth_identity!(auth_data, provider, account)
         Success(account)
       end
-      # TODO: send stream for newly created account
     end
 
     private
