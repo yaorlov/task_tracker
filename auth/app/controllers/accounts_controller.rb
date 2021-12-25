@@ -32,6 +32,14 @@ class AccountsController < ApplicationController
 
       if @account.update(account_params)
         # ----------------------------- produce event -----------------------
+        producer = WaterDrop::Producer.new do |config|
+          config.deliver = true
+          config.kafka = {
+            'bootstrap.servers': 'localhost:9092',
+            'request.required.acks': 1
+          }
+        end
+
         event = {
           event_name: 'AccountUpdated',
           data: {
@@ -41,15 +49,17 @@ class AccountsController < ApplicationController
             position: @account.position
           }
         }
-        Producer.call(event.to_json, topic: 'accounts-stream')
+        producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
 
         if new_role
           event = {
             event_name: 'AccountRoleChanged',
             data: { public_id: @account.public_id, role: @account.role }
           }
-          Producer.call(event.to_json, topic: 'accounts')
+          producer.produce_sync(payload: event.to_json, topic: 'accounts')
         end
+
+        producer.close
         # --------------------------------------------------------------------
 
         format.html { redirect_to accounts_path, notice: 'Account was successfully updated.' }
@@ -70,11 +80,21 @@ class AccountsController < ApplicationController
     @account.update(active: false, disabled_at: Time.zone.now)
 
     # ----------------------------- produce event -----------------------
+    producer = WaterDrop::Producer.new do |config|
+      config.deliver = true
+      config.kafka = {
+        'bootstrap.servers': 'localhost:9092',
+        'request.required.acks': 1
+      }
+    end
+
     event = {
       event_name: 'AccountDeleted',
       data: { public_id: @account.public_id }
     }
-    Producer.call(event.to_json, topic: 'accounts-stream')
+    producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
+
+    producer.close
     # --------------------------------------------------------------------
 
     respond_to do |format|

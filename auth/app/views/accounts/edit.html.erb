@@ -4,6 +4,6 @@
   <%= form.label :position %>
   <%= form.text_field :position, value: @account.position %>
   <%= form.label :role %>
-  <%= form.select :role, Account.roles.humanize).zip(Account.roles.keys), selected: @account.role %>
+  <%= form.select :role, Account.roles.keys.map(&:humanize).zip(Account.roles.keys), selected: @account.role %>
   <%= form.submit %>
 <% end %>

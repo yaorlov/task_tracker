@@ -38,8 +38,8 @@ RSpec.describe Accounts::FindOrCreateByAuthService, type: :service do
     end
   end
 
-  context 'when account already exists' do
-    let(:account) { create(:account, public_id: public_id) }
+  context 'when account and auth_identity already exist' do
+    let(:account) { create(:account, email: 'admin@test.com', public_id: public_id) }
 
     before do
       auth_identity = create(:auth_identity, account: account, provider: 'keepa', login: "admin@test.com")
@@ -48,6 +48,26 @@ RSpec.describe Accounts::FindOrCreateByAuthService, type: :service do
     it 'does not create a new account with auth identity' do
       expect { call_service }.to not_change { Account.where(public_id: public_id).count }.and \
         not_change { AuthIdentity.where(uid: public_id).count }
+    end
+
+    it 'returns success with existing account as a value' do
+      result = call_service
+      expect(result).to be_success
+      expect(result.value!).to eq(account)
+    end
+  end
+
+  context 'when account without auth_identity already exists' do
+    let(:account) { create(:account, email: 'admin@test.com', public_id: public_id) }
+
+    before { account }
+
+    it 'does not create a new account' do
+      expect { call_service }.to not_change { Account.where(public_id: public_id).count }
+    end
+
+    it 'creates auth identity' do
+      expect { call_service }.to change { AuthIdentity.where(uid: public_id).count }.from(0).to(1)
     end
 
     it 'returns success with existing account as a value' do
