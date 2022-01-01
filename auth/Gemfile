@@ -27,7 +27,8 @@ gem 'devise'
 gem 'doorkeeper'
 gem 'omniauth-oauth2'
 
-# Events
+# Kafka
+gem 'schema_registry', path: '../event_schema_registry/ruby/'
 gem 'waterdrop'
 
 # Reduces boot times through caching; required in config/boot.rb
