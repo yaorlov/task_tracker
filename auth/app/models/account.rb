@@ -23,11 +23,21 @@ class Account < ApplicationRecord
     end
 
     event = {
-      event_name: 'AccountCreated',
+      event_name: 'AccountsCreated',
+      event_id: SecureRandom.uuid,
+      event_version: 1,
+      event_time: Time.now.to_s,
+      producer: 'auth_service',
       data: self.reload.attributes.slice('public_id', 'email', 'role', 'full_name')
     }
 
-    producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
+    result = SchemaRegistry.validate_event(event, 'accounts.created', version: 1)
+
+    if result.success?
+      producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
+    else
+      logger.error('Invalid payload for "accounts-stream" event: ' + result.failure.join('; '))
+    end
 
     producer.close
   end
