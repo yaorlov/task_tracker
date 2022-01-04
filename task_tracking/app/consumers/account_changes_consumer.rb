@@ -9,21 +9,51 @@ class AccountChangesConsumer < ApplicationConsumer
 
       account = Account.find_by(public_id: message.payload['data']['public_id'])
 
-      case message.payload['event_name']
-      when 'AccountCreated'
-        Account.create(message.payload['data'])
-      when 'AccountUpdated'
-        if account
-          account.update(
-            full_name: message.payload['data']['full_name']
-          )
+      case [message.payload['event_name'], message.payload['version']]
+      when ['AccountsCreated', 1]
+        result = SchemaRegistry.validate_event(event, 'accounts.created', version: 1)
+
+        if result.success?
+          Rails.logger.info('AccountsCreated')
+          Account.create(message.payload['data'])
+        else
+          # store events in DB or produce invalid event to "invalid-events-topic"
         end
-      when 'AccountDeleted'
-        account.destroy if account
-      when 'AccountRoleChanged'
-        account.update(role: message.payload['data']['role']) if account
+      when ['AccountsUpdated', 1]
+        return unless account
+
+        result = SchemaRegistry.validate_event(event, 'accounts.updated', version: 1)
+
+        if result.success?
+          Rails.logger.info('AccountsUpdated')
+          account.update(full_name: message.payload['data']['full_name'])
+        else
+          # store events in DB or produce invalid event to "invalid-events-topic"
+        end
+      when ['AccountsDeleted', 1]
+        return unless account
+
+        result = SchemaRegistry.validate_event(event, 'accounts.deleted', version: 1)
+
+        if result.success?
+          Rails.logger.info('AccountsDeleted')
+          account.destroy
+        else
+          # store events in DB or produce invalid event to "invalid-events-topic"
+        end
+      when ['AccountsRoleChanged', 1]
+        return unless account
+
+        result = SchemaRegistry.validate_event(event, 'accounts.role_changed', version: 1)
+
+        if result.success?
+          Rails.logger.info('AccountsRoleChanged')
+          account.update(role: message.payload['data']['role'])
+        else
+          # store events in DB or produce invalid event to "invalid-events-topic"
+        end
       else
-        # store events in DB
+        # store events in DB or produce invalid event to "invalid-events-topic"
       end
     end
   end
