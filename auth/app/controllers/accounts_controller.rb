@@ -41,7 +41,11 @@ class AccountsController < ApplicationController
         end
 
         event = {
-          event_name: 'AccountUpdated',
+          event_name: 'AccountsUpdated',
+          event_id: SecureRandom.uuid,
+          event_version: 1,
+          event_time: Time.now.to_s,
+          producer: 'auth_service',
           data: {
             public_id: @account.public_id,
             email: @account.email,
@@ -49,14 +53,31 @@ class AccountsController < ApplicationController
             position: @account.position
           }
         }
-        producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
+        result = SchemaRegistry.validate_event(event, 'accounts.updated', version: 1)
+
+        if result.success?
+          producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
+        else
+          logger.error('Invalid payload for "accounts-stream" event: ' + result.failure.join('; '))
+        end
 
         if new_role
           event = {
-            event_name: 'AccountRoleChanged',
+            event_name: 'AccountsRoleChanged',
+            event_id: SecureRandom.uuid,
+            event_version: 1,
+            event_time: Time.now.to_s,
+            producer: 'auth_service',
             data: { public_id: @account.public_id, role: @account.role }
           }
-          producer.produce_sync(payload: event.to_json, topic: 'accounts')
+
+          result = SchemaRegistry.validate_event(event, 'accounts.role_changed', version: 1)
+
+          if result.success?
+            producer.produce_sync(payload: event.to_json, topic: 'accounts')
+          else
+            logger.error('Invalid payload for "accounts" event: ' + result.failure.join('; '))
+          end
         end
 
         producer.close
@@ -89,10 +110,21 @@ class AccountsController < ApplicationController
     end
 
     event = {
-      event_name: 'AccountDeleted',
+      event_name: 'AccountsDeleted',
+      event_id: SecureRandom.uuid,
+      event_version: 1,
+      event_time: Time.now.to_s,
+      producer: 'auth_service',
       data: { public_id: @account.public_id }
     }
-    producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
+
+    result = SchemaRegistry.validate_event(event, 'accounts.deleted', version: 1)
+
+    if result.success?
+      producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
+    else
+      logger.error('Invalid payload for "accounts-stream" event: ' + result.failure.join('; '))
+    end
 
     producer.close
     # --------------------------------------------------------------------
