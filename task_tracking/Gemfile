@@ -42,6 +42,8 @@ gem 'dry-monads'
 
 # Kafka gems
 gem 'karafka', '~> 1.4'
+gem 'schema_registry', path: '../event_schema_registry/ruby/'
+gem 'waterdrop'
 
 group :development, :test do
   gem 'dotenv-rails'
