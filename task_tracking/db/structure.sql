@@ -134,7 +134,8 @@ CREATE TABLE public.tasks (
     status integer DEFAULT 0 NOT NULL,
     account_id bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    public_id character varying DEFAULT 'gen_random_uuid()'::character varying NOT NULL
 );
 
 
@@ -265,6 +266,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210306200947'),
 ('20210306210518'),
 ('20210902193707'),
-('20210903194234');
+('20210903194234'),
+('20220106152619');
 
 

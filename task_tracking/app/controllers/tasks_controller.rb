@@ -14,6 +14,28 @@ class TasksController < ApplicationController
 
   def done
     @task.done!
+
+    # ----------------------------- produce event -----------------------
+    event = {
+      event_name: 'TasksCompleted',
+      event_id: SecureRandom.uuid,
+      event_version: 1,
+      event_time: Time.now.to_s,
+      producer: 'task_tracking_service',
+      data: {
+        public_id: @task.public_id,
+        status: @task.status,
+      }
+    }
+    result = SchemaRegistry.validate_event(event, 'tasks.completed', version: 1)
+
+    if result.success?
+      WaterDrop::SyncProducer.call(event.to_json, topic: 'tasks')
+    else
+      logger.error('Invalid payload for "tasks" event: ' + result.failure.join('; '))
+    end
+    # --------------------------------------------------------------------
+
     redirect_back(fallback_location: tasks_path)
   end
 
