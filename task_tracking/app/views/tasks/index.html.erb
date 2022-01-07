@@ -4,6 +4,9 @@
 <p>
   <%= link_to('Create Task', new_task_path) %>
 </p>
+<p>
+  <%= link_to('Re-assign Tasks', tasks_reassign_path, method: :patch) if %w[admin manager].include?(@current_account['role']) %>
+</p>
 <h1>Tasks Dashboard</h1>
 
 <%= render 'shared/tasks_list' %>
