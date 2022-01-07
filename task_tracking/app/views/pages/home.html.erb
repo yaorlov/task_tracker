@@ -2,5 +2,5 @@
   <%= link_to('Tasks Dashboard', tasks_path) %>
 </h1>
 <h1>
-  <%= link_to('My Tasks', tasks_account_path(id: @current_account['id'])) %>
+  <%= link_to('My Tasks', tasks_account_path(id: @current_account['id'])) if @current_account['role'] == 'worker' %>
 </h1>

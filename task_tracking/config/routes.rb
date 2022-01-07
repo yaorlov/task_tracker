@@ -3,7 +3,7 @@
 Rails.application.routes.draw do
   root 'pages#home'
 
-  resources :tasks, only: [:index]
+  resources :tasks, only: %i[index new create]
   resources :accounts, only: [] do
     member do
       get :tasks

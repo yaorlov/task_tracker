@@ -1,2 +1,9 @@
+<p>
+  <%= link_to('My Tasks', tasks_account_path(id: @current_account['id'])) if @current_account['role'] == 'worker' %>
+</p>
+<p>
+  <%= link_to('Create Task', new_task_path) %>
+</p>
 <h1>Tasks Dashboard</h1>
+
 <%= render 'shared/tasks_list' %>
