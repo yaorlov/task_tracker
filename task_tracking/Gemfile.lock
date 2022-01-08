@@ -1,3 +1,9 @@
+PATH
+  remote: ../event_schema_registry/ruby
+  specs:
+    schema_registry (1)
+      json-schema
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -60,6 +66,8 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
+    addressable (2.8.0)
+      public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.2)
     autoprefixer-rails (10.3.1.0)
       execjs (~> 2)
@@ -167,6 +175,8 @@ GEM
       reline (>= 0.2.7)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
+    json-schema (2.8.1)
+      addressable (>= 2.4)
     jwt (2.2.3)
     karafka (1.4.10)
       dry-configurable (~> 0.13)
@@ -232,6 +242,7 @@ GEM
       pry (~> 0.13.0)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
+    public_suffix (4.0.6)
     puma (5.2.2)
       nio4r (~> 2.0)
     racc (1.5.2)
@@ -393,9 +404,11 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   sass-rails (>= 6)
+  schema_registry!
   spring
   turbolinks (~> 5)
   tzinfo-data
+  waterdrop
   web-console (>= 4.1.0)
   webpacker (~> 5.0)
 

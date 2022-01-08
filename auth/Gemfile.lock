@@ -353,7 +353,7 @@ DEPENDENCIES
   schema_registry!
   spring
   tzinfo-data
-  waterdrop
+  waterdrop (~> 2.0)
   web-console (>= 4.1.0)
   webpacker (~> 5.0)
 

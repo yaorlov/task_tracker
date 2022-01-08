@@ -17,7 +17,7 @@ end
 class KarafkaApp < Karafka::App
   setup do |config|
     config.kafka.seed_brokers = %w[kafka://127.0.0.1:9092]
-    config.client_id = 'example_app'
+    config.client_id = 'task_tracking'
     config.logger = Rails.logger
   end
 
@@ -41,9 +41,11 @@ class KarafkaApp < Karafka::App
   # )
 
   consumer_groups.draw do
-    # topic :notifications do
-    #   consumer NotificationsConsumer
-    # end
+    consumer_group :notification_group do
+      topic 'tasks' do
+        consumer NotificationsConsumer
+      end
+    end
 
     consumer_group :real_work do
       # CUD events

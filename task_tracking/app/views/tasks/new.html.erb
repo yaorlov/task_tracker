@@ -1,0 +1,27 @@
+<p>
+  <%= link_to('Tasks Dashboard', tasks_path) %>
+</p>
+<p>
+  <%= link_to('My Tasks', tasks_account_path(id: @current_account['id'])) if @current_account['role'] == 'worker' %>
+</p>
+
+<% if @task.errors.any? %>
+  <% @task.errors.full_messages.each do |message|%>
+    <p class="text-danger"><%= message %></p>
+  <%end%>
+<%end%>
+
+<br/>
+
+<%= form_with model: @task do |form| %>
+  <%= form.label :description %>
+  <%= form.text_field :description, value: @task.description %>
+  <%= form.label :assignee %>
+  <%= form.select(
+    :account_id,
+    Account.worker.pluck(:full_name).zip(Account.worker.pluck(:id)),
+    selected: @task.assignee,
+    include_blank: true
+  )%>
+  <%= form.submit %>
+<% end %>
