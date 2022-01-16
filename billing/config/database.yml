@@ -1,0 +1,24 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  encoding: utf8
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
+
+development:
+  <<: *default
+  database: billing_development
+  url: <%= ENV.fetch('PRIMARY_DATABASE_URL') %>
+
+test:
+  <<: *default
+  database: billing_test
+  url: <%= ENV.fetch('PRIMARY_DATABASE_URL') %>
+
+production:
+  <<: *default
+  database: billing_production
+  username: billing
+  password: <%= ENV.fetch('BILLING_DATABASE_PASSWORD') %>
+  url: <%= ENV.fetch('PRIMARY_DATABASE_URL') %>
