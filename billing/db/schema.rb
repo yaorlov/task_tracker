@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(version: 2022_01_28_130615) do
   create_enum "account_roles", ["admin", "manager", "finance", "worker"]
 
   create_table "accounts", force: :cascade do |t|
-    t.string "first_name", null: false
-    t.string "last_name", null: false
+    t.string "full_name", null: false
+    t.string "public_id", null: false
     t.string "email", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

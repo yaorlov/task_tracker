@@ -1,27 +1,26 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
 * Database creation
+`bundle exec rails db:create db:migrate:db:seed`
 
-* Database initialization
+* Run rails and karafka servers
+`foreman start`
 
 * How to run the test suite
+`bundle exec rspec`
 
-* Services (job queues, cache servers, search engines, etc.)
+### Setup Auth
+1. Go to http://localhost:3000/oauth/applications
+2. Create a new oAuth application with:
+```
+name: billing
+redirect URI: http://localhost:4000/auth/keepa/callback
+scopes: public write
+```
+3. Copy `UID` to `AUTH_KEY` env variable
+4. Copy `Secret` to `AUTH_SECRET` env variable
 
-* Deployment instructions
-
-* ...
+=================
 
 Events for billing: https://www.youtube.com/watch?v=TU9ykdAY4oo
 Domain for billing: https://youtu.be/Q4DM-Yzhdqg?t=3550
