@@ -7,4 +7,6 @@ class Account < ApplicationRecord
     finance: 'finance',
     worker: 'worker'
   }
+
+  has_many :auth_identities, dependent: :destroy
 end

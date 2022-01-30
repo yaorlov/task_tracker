@@ -1,3 +1,2 @@
-export PORT=5000
-rails: bundle exec rails s
+rails: PORT=5000 bundle exec rails s
 kafka_consumer: rm -f tmp/pids/karafka && bundle exec karafka s
