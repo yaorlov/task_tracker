@@ -8,12 +8,14 @@ FactoryBot.define do
     public_id { SecureRandom.uuid }
 
     transient do
-      with_tasks { false }
+      with_billing_account { true }
       tasks_count { 2 }
     end
 
-    after(:build) do |account, evaluator|
-      create_list(:task, evaluator.tasks_count, assignee: account) if evaluator.with_tasks
+    after :build do |account, evaluator|
+      if evaluator.with_billing_account
+        create :billing_account, account:, amount: 0
+      end
     end
   end
 end

@@ -26,9 +26,10 @@ RSpec.describe Accounts::FindOrCreateByAuthService, type: :service do
   end
 
   context 'when account does not exist' do
-    it 'creates a new account with auth identity' do
+    it 'creates a new account with auth identity and billing_account' do
       expect { call_service }.to change { Account.where(public_id: public_id).count }.from(0).to(1).and \
-        change { AuthIdentity.where(uid: public_id).count }.from(0).to(1)
+        change { AuthIdentity.where(uid: public_id).count }.from(0).to(1).and \
+        change { BillingAccount.where(account_id: Account.find_by(public_id: public_id)&.id).count }.from(0).to(1)
     end
 
     it 'returns success with new account as a value' do
