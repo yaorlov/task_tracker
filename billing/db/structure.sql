@@ -157,6 +157,42 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: tasks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tasks (
+    id bigint NOT NULL,
+    description text NOT NULL,
+    status integer NOT NULL,
+    public_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    assign_price integer,
+    complete_price integer,
+    account_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.tasks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.tasks_id_seq OWNED BY public.tasks.id;
+
+
+--
 -- Name: accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -175,6 +211,13 @@ ALTER TABLE ONLY public.auth_identities ALTER COLUMN id SET DEFAULT nextval('pub
 --
 
 ALTER TABLE ONLY public.billing_accounts ALTER COLUMN id SET DEFAULT nextval('public.billing_accounts_id_seq'::regclass);
+
+
+--
+-- Name: tasks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks ALTER COLUMN id SET DEFAULT nextval('public.tasks_id_seq'::regclass);
 
 
 --
@@ -218,6 +261,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT tasks_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: index_accounts_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -239,11 +290,26 @@ CREATE INDEX index_billing_accounts_on_account_id ON public.billing_accounts USI
 
 
 --
+-- Name: index_tasks_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tasks_on_account_id ON public.tasks USING btree (account_id);
+
+
+--
 -- Name: auth_identities fk_rails_266f183a69; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.auth_identities
     ADD CONSTRAINT fk_rails_266f183a69 FOREIGN KEY (account_id) REFERENCES public.accounts(id);
+
+
+--
+-- Name: tasks fk_rails_43dfabfaca; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT fk_rails_43dfabfaca FOREIGN KEY (account_id) REFERENCES public.accounts(id);
 
 
 --
@@ -264,6 +330,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220128130247'),
 ('20220128130615'),
 ('20220129204342'),
-('20220205143204');
+('20220205143204'),
+('20220205204746');
 
 

@@ -9,6 +9,7 @@ class Account < ApplicationRecord
   }
 
   has_many :auth_identities, dependent: :destroy
+  has_many :tasks, dependent: :destroy
 
   has_one :billing_account
 end

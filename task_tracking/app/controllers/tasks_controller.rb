@@ -17,6 +17,7 @@ class TasksController < ApplicationController
 
     if @task.valid?
       @task.save!
+      @task.reload # reload is needed to get the assigned public_id
 
       # ----------------------------- produce event -----------------------
       event = {
