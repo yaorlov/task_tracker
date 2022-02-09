@@ -2,13 +2,17 @@
 
 class TasksController < ApplicationController
   before_action :set_task, only: %i[in_progress done]
-  before_action :set_current_account, only: %i[index new]
+  before_action :set_current_account, only: %i[index new create]
 
   def index
+    return redirect_to login_path unless session[:account]
+
     @tasks = Task.all.includes(:assignee)
   end
 
   def new
+    return redirect_to login_path unless session[:account]
+
     @task = Task.new
   end
 

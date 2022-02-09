@@ -59,6 +59,10 @@ class KarafkaApp < Karafka::App
       topic 'accounts' do
         consumer AccountChangesConsumer
       end
+
+      topic 'tasks' do
+        consumer TaskChangesConsumer
+      end
     end
   end
 end
