@@ -3,7 +3,18 @@
     <li class="list-group-item">
       <p>Description: <%= task.description %></p>
 
-      <p>Status: <%= task.status.humanize %></p>
+      <p>
+        Status:
+        <% if task.done? %>
+          <span class="badge bg-success">
+            <%= task.status.humanize %>
+          </span>
+        <% else %>
+          <span class="badge bg-warning">
+            <%= task.status.humanize %>
+          </span>
+        <% end %>
+      </p>
 
       <p>Assignee: <%= task.assignee.full_name %></p>
 
