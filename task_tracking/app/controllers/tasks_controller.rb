@@ -71,7 +71,9 @@ class TasksController < ApplicationController
       producer: 'task_tracking_service',
       data: {
         public_id: @task.public_id,
-        status: @task.status,
+        assignee: {
+          public_id: @task.assignee.public_id
+        }
       }
     }
     result = SchemaRegistry.validate_event(event, 'tasks.completed', version: 1)

@@ -30,6 +30,17 @@ CREATE TYPE public.auth_identity_providers AS ENUM (
 );
 
 
+--
+-- Name: transaction_types; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.transaction_types AS ENUM (
+    'task_completed',
+    'task_assigned',
+    'payout'
+);
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -193,6 +204,42 @@ ALTER SEQUENCE public.tasks_id_seq OWNED BY public.tasks.id;
 
 
 --
+-- Name: transactions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.transactions (
+    id bigint NOT NULL,
+    debit integer DEFAULT 0 NOT NULL,
+    credit integer DEFAULT 0 NOT NULL,
+    public_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    billing_account_id bigint NOT NULL,
+    task_id bigint,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    transaction_type public.transaction_types NOT NULL
+);
+
+
+--
+-- Name: transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.transactions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.transactions_id_seq OWNED BY public.transactions.id;
+
+
+--
 -- Name: accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -218,6 +265,13 @@ ALTER TABLE ONLY public.billing_accounts ALTER COLUMN id SET DEFAULT nextval('pu
 --
 
 ALTER TABLE ONLY public.tasks ALTER COLUMN id SET DEFAULT nextval('public.tasks_id_seq'::regclass);
+
+
+--
+-- Name: transactions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.transactions ALTER COLUMN id SET DEFAULT nextval('public.transactions_id_seq'::regclass);
 
 
 --
@@ -269,6 +323,14 @@ ALTER TABLE ONLY public.tasks
 
 
 --
+-- Name: transactions transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: index_accounts_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -297,6 +359,28 @@ CREATE INDEX index_tasks_on_account_id ON public.tasks USING btree (account_id);
 
 
 --
+-- Name: index_transactions_on_billing_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_transactions_on_billing_account_id ON public.transactions USING btree (billing_account_id);
+
+
+--
+-- Name: index_transactions_on_task_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_transactions_on_task_id ON public.transactions USING btree (task_id);
+
+
+--
+-- Name: transactions fk_rails_20e350e6a1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT fk_rails_20e350e6a1 FOREIGN KEY (billing_account_id) REFERENCES public.billing_accounts(id);
+
+
+--
 -- Name: auth_identities fk_rails_266f183a69; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -321,6 +405,14 @@ ALTER TABLE ONLY public.billing_accounts
 
 
 --
+-- Name: transactions fk_rails_c50de3ea97; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT fk_rails_c50de3ea97 FOREIGN KEY (task_id) REFERENCES public.tasks(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -331,6 +423,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220128130615'),
 ('20220129204342'),
 ('20220205143204'),
-('20220205204746');
+('20220205204746'),
+('20220210174306');
 
 

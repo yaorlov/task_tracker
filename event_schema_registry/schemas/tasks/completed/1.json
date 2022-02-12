@@ -12,13 +12,19 @@
           "type": "string",
           "format": "uuid"
         },
-        "status": {
-          "enum": ["in_progress", "done"]
+        "assignee": {
+          "type": "object",
+          "properties": {
+            "public_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
         }
       },
       "required": [
         "public_id",
-        "status"
+        "assignee"
       ]
     }
   },
