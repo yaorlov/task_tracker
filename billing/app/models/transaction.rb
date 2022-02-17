@@ -9,4 +9,5 @@ class Transaction < ApplicationRecord
 
   belongs_to :billing_account
   belongs_to :task, optional: true
+  belongs_to :cycle, optional: true
 end

@@ -159,6 +159,39 @@ ALTER SEQUENCE public.billing_accounts_id_seq OWNED BY public.billing_accounts.i
 
 
 --
+-- Name: cycles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cycles (
+    id bigint NOT NULL,
+    amount integer DEFAULT 0 NOT NULL,
+    closed boolean DEFAULT false NOT NULL,
+    billing_account_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: cycles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cycles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cycles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cycles_id_seq OWNED BY public.cycles.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -216,7 +249,8 @@ CREATE TABLE public.transactions (
     task_id bigint,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    transaction_type public.transaction_types NOT NULL
+    transaction_type public.transaction_types NOT NULL,
+    cycle_id bigint
 );
 
 
@@ -258,6 +292,13 @@ ALTER TABLE ONLY public.auth_identities ALTER COLUMN id SET DEFAULT nextval('pub
 --
 
 ALTER TABLE ONLY public.billing_accounts ALTER COLUMN id SET DEFAULT nextval('public.billing_accounts_id_seq'::regclass);
+
+
+--
+-- Name: cycles id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cycles ALTER COLUMN id SET DEFAULT nextval('public.cycles_id_seq'::regclass);
 
 
 --
@@ -307,6 +348,14 @@ ALTER TABLE ONLY public.billing_accounts
 
 
 --
+-- Name: cycles cycles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cycles
+    ADD CONSTRAINT cycles_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -352,6 +401,13 @@ CREATE INDEX index_billing_accounts_on_account_id ON public.billing_accounts USI
 
 
 --
+-- Name: index_cycles_on_billing_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cycles_on_billing_account_id ON public.cycles USING btree (billing_account_id);
+
+
+--
 -- Name: index_tasks_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -363,6 +419,13 @@ CREATE INDEX index_tasks_on_account_id ON public.tasks USING btree (account_id);
 --
 
 CREATE INDEX index_transactions_on_billing_account_id ON public.transactions USING btree (billing_account_id);
+
+
+--
+-- Name: index_transactions_on_cycle_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_transactions_on_cycle_id ON public.transactions USING btree (cycle_id);
 
 
 --
@@ -397,6 +460,22 @@ ALTER TABLE ONLY public.tasks
 
 
 --
+-- Name: cycles fk_rails_4d24157e75; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cycles
+    ADD CONSTRAINT fk_rails_4d24157e75 FOREIGN KEY (billing_account_id) REFERENCES public.billing_accounts(id);
+
+
+--
+-- Name: transactions fk_rails_4d258ff849; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT fk_rails_4d258ff849 FOREIGN KEY (cycle_id) REFERENCES public.cycles(id);
+
+
+--
 -- Name: billing_accounts fk_rails_54a58bf393; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -424,6 +503,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220129204342'),
 ('20220205143204'),
 ('20220205204746'),
-('20220210174306');
+('20220210174306'),
+('20220217153343');
 
 

@@ -37,10 +37,21 @@ class TaskChangesConsumer < ApplicationConsumer
           task = Task.find_by(public_id: message.payload['data']['public_id'])
           billing_account = account&.billing_account
 
-          if task
-            Transaction.create!(credit: task.assign_price, transaction_type: :task_assigned, task:, billing_account:)
-          else
+          if task.nil?
             Rails.logger.error("Task with public_id #{message.payload['data']['public_id']} doesn't exist")
+            return
+          end
+
+          if billing_account.nil?
+            Rails.logger.error("BillingAccount for account with public_id #{message.payload.dig('data', 'assignee', 'public_id')} doesn't exist")
+            return
+          end
+
+          ActiveRecord::Base.transaction do
+            account.billing_account.update!(amount: account.billing_account.amount - task.assign_price)
+            cycle = Cycle.find_or_create_by!(closed: false, billing_account: account.billing_account)
+            transaction = Transaction.create!(credit: task.assign_price, transaction_type: :task_assigned, task:, billing_account:, cycle:)
+            cycle.update!(amount: cycle.amount - task.assign_price)
           end
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
@@ -53,10 +64,21 @@ class TaskChangesConsumer < ApplicationConsumer
           task = Task.find_by(public_id: message.payload['data']['public_id'])
           billing_account = account&.billing_account
 
-          if task
-            Transaction.create!(debit: task.complete_price, transaction_type: :task_completed, task:, billing_account:)
-          else
+          if task.nil?
             Rails.logger.error("Task with public_id #{message.payload['data']['public_id']} doesn't exist")
+            return
+          end
+
+          if billing_account.nil?
+            Rails.logger.error("BillingAccount for account with public_id #{message.payload.dig('data', 'assignee', 'public_id')} doesn't exist")
+            return
+          end
+
+          ActiveRecord::Base.transaction do
+            account.billing_account.update!(amount: account.billing_account.amount + task.complete_price)
+            cycle = Cycle.find_or_create_by!(closed: false, billing_account: account.billing_account)
+            transaction = Transaction.create!(debit: task.complete_price, transaction_type: :task_completed, task:, billing_account:)
+            cycle.update!(amount: cycle.amount + task.complete_price)
           end
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
