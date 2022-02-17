@@ -17,7 +17,12 @@ class TaskChangesConsumer < ApplicationConsumer
           Rails.logger.info('TasksCreated')
 
           if account
-            Task.create!(**message.payload['data'].except('assignee'), assignee: account)
+            Task.create!(
+              **message.payload['data'].except('assignee'),
+              assignee: account,
+              assign_price: rand(20..10) * 100,
+              complete_price: rand(20..40) * 100
+            )
           else
             Rails.logger.error("Account with public_id #{message.payload['data']['assignee']['public_id']} doesn't exist")
           end
@@ -33,12 +38,7 @@ class TaskChangesConsumer < ApplicationConsumer
           billing_account = account&.billing_account
 
           if task
-            assign_price = rand(20..10) * 100
-
-            ActiveRecord::Base.transaction do
-              task.update!(assign_price:)
-              Transaction.create!(credit: assign_price, transaction_type: :task_assigned, task:, billing_account:)
-            end
+            Transaction.create!(credit: task.assign_price, transaction_type: :task_assigned, task:, billing_account:)
           else
             Rails.logger.error("Task with public_id #{message.payload['data']['public_id']} doesn't exist")
           end
@@ -54,12 +54,7 @@ class TaskChangesConsumer < ApplicationConsumer
           billing_account = account&.billing_account
 
           if task
-            complete_price = rand(20..40) * 100
-
-            ActiveRecord::Base.transaction do
-              task.update!(complete_price:)
-              Transaction.create!(debit: complete_price, transaction_type: :task_completed, task:, billing_account:)
-            end
+            Transaction.create!(debit: task.complete_price, transaction_type: :task_completed, task:, billing_account:)
           else
             Rails.logger.error("Task with public_id #{message.payload['data']['public_id']} doesn't exist")
           end
