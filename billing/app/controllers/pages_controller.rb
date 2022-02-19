@@ -5,6 +5,11 @@ class PagesController < ApplicationController
     return redirect_to login_path unless session[:account]
 
     @current_account = session[:account]
-    @today_revenue = Cycle.where(closed: false).sum(:amount) * -1
+
+    if %w[admin finance].include?(session[:account][:role])
+      @today_revenue = Cycle.where(closed: false).sum(:amount) * -1
+    else
+      flash.now[:danger] = 'You are not authorized to use billing dashboard'
+    end
   end
 end
