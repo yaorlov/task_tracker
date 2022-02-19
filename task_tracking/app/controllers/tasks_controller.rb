@@ -7,7 +7,7 @@ class TasksController < ApplicationController
   def index
     return redirect_to login_path unless session[:account]
 
-    @tasks = Task.all.includes(:assignee)
+    @tasks = Task.all.includes(:assignee).order(created_at: :desc)
   end
 
   def new
@@ -90,6 +90,13 @@ class TasksController < ApplicationController
 
   def reassign
     tasks = Task.in_progress.select(:id, :public_id, :description, :status, :created_at).as_json
+
+    if tasks.empty?
+      flash[:warning] = 'There are no tasks in-progress. Nothing to re-assign'
+      redirect_to tasks_path
+      return
+    end
+
     account_ids = Account.worker.pluck(:id, :public_id).to_h
     payload = tasks.map { |task| task.merge(account_id: account_ids.keys.sample) }
     result = Task.upsert_all(payload, unique_by: :id, returning: %i[public_id account_id])

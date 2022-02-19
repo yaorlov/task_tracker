@@ -20,7 +20,7 @@ class TaskChangesConsumer < ApplicationConsumer
             Task.create!(
               **message.payload['data'].except('assignee'),
               assignee: account,
-              assign_price: rand(20..10) * 100,
+              assign_price: rand(10..20) * 100,
               complete_price: rand(20..40) * 100
             )
           else
