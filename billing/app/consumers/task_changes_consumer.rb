@@ -50,7 +50,7 @@ class TaskChangesConsumer < ApplicationConsumer
           ActiveRecord::Base.transaction do
             account.billing_account.update!(amount: account.billing_account.amount - task.assign_price)
             cycle = Cycle.find_or_create_by!(closed: false, billing_account: account.billing_account)
-            transaction = Transaction.create!(credit: task.assign_price, transaction_type: :task_assigned, task:, billing_account:, cycle:)
+            transaction = Transaction.create!(credit: task.assign_price, transaction_type: :task_assigned, task:, billing_account:, cycle:) # attach cycle?
             cycle.update!(amount: cycle.amount - task.assign_price)
           end
         else
@@ -77,7 +77,7 @@ class TaskChangesConsumer < ApplicationConsumer
           ActiveRecord::Base.transaction do
             account.billing_account.update!(amount: account.billing_account.amount + task.complete_price)
             cycle = Cycle.find_or_create_by!(closed: false, billing_account: account.billing_account)
-            transaction = Transaction.create!(debit: task.complete_price, transaction_type: :task_completed, task:, billing_account:)
+            transaction = Transaction.create!(debit: task.complete_price, transaction_type: :task_completed, task:, billing_account:, cycle:)
             cycle.update!(amount: cycle.amount + task.complete_price)
           end
         else

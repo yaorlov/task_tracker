@@ -51,6 +51,9 @@ gem 'omniauth-rails_csrf_protection'
 # dry-rb gems
 gem 'dry-monads'
 
+# crontab
+gem 'whenever', require: false
+
 group :development, :test do
   gem 'factory_bot_rails'
   gem 'ffaker'

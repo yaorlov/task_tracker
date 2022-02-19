@@ -1,2 +1,2 @@
-rails: PORT=4000 bundle exec rails s
+rails: whenever --update-crontab --set environment='development' && PORT=4000 bundle exec rails s
 kafka_consumer: rm -f tmp/pids/karafka && bundle exec karafka s

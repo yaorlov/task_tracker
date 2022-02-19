@@ -2,5 +2,5 @@
 
 class Cycle < ApplicationRecord
   belongs_to :billing_account
-  has_many :transactions
+  has_many :transactions, dependent: :destroy
 end
