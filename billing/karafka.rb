@@ -41,9 +41,9 @@ class KarafkaApp < Karafka::App
   # )
 
   consumer_groups.draw do
-    # topic :notifications do
-    #   consumer NotificationsConsumer
-    # end
+    topic :cycles do
+      consumer NotificationsConsumer
+    end
 
     consumer_group :real_work do
       # CUD events

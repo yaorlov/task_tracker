@@ -15,7 +15,7 @@
         "amount": {
           "type": "integer"
         },
-        "billing_account": {
+        "account": {
           "type": "object",
           "properties": {
             "public_id": {
@@ -28,7 +28,7 @@
       "required": [
         "public_id",
         "amount",
-        "billing_account"
+        "account"
       ]
     }
   },

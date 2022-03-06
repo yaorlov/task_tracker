@@ -30,8 +30,8 @@ task close_billing_cycles: :environment do
         data: {
           public_id: cycle.public_id,
           amount: cycle.amount,
-          billing_account: {
-            public_id: cycle.billing_account.public_id
+          account: {
+            public_id: cycle.billing_account.account.public_id
           }
         }
       }
