@@ -133,6 +133,7 @@ ALTER SEQUENCE public.auth_identities_id_seq OWNED BY public.auth_identities.id;
 CREATE TABLE public.billing_accounts (
     id bigint NOT NULL,
     amount integer DEFAULT 0 NOT NULL,
+    public_id uuid DEFAULT gen_random_uuid() NOT NULL,
     account_id bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
@@ -166,6 +167,7 @@ CREATE TABLE public.cycles (
     id bigint NOT NULL,
     amount integer DEFAULT 0 NOT NULL,
     closed boolean DEFAULT false NOT NULL,
+    public_id uuid DEFAULT gen_random_uuid() NOT NULL,
     billing_account_id bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
@@ -208,7 +210,7 @@ CREATE TABLE public.tasks (
     id bigint NOT NULL,
     description text NOT NULL,
     status integer NOT NULL,
-    public_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    public_id uuid NOT NULL,
     assign_price integer,
     complete_price integer,
     account_id bigint NOT NULL,

@@ -381,6 +381,7 @@ DEPENDENCIES
   stimulus-rails
   turbo-rails
   tzinfo-data
+  waterdrop
   web-console
   whenever
 

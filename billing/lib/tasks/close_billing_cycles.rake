@@ -20,6 +20,30 @@ task close_billing_cycles: :environment do
           Cycle.create!(billing_account: cycle.billing_account, amount: cycle.amount, closed: false)
         end
       end
+
+      event = {
+        event_name: 'CyclesClosed',
+        event_id: SecureRandom.uuid,
+        event_version: 1,
+        event_time: Time.now.to_s,
+        producer: 'billing_service',
+        data: {
+          public_id: cycle.public_id,
+          amount: cycle.amount,
+          billing_account: {
+            public_id: cycle.billing_account.public_id
+          }
+        }
+      }
+      result = SchemaRegistry.validate_event(event, 'cycles.closed', version: 1)
+
+      if result.success?
+        WaterDrop::SyncProducer.call(event.to_json, topic: 'cycles')
+      else
+        Rails.logger.error('Invalid payload for "cycles" event: ' + result.failure.join('; '))
+      end
+    rescue StandardError => e
+      Rails.logger.error(e)
     end
   end
 end

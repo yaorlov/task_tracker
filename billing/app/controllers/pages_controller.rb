@@ -6,7 +6,7 @@ class PagesController < ApplicationController
 
     @current_account = session[:account]
 
-    if %w[admin finance].include?(session[:account][:role])
+    if %w[admin finance].include?(@current_account['role'])
       @today_revenue = Cycle.where(closed: false).sum(:amount) * -1
     else
       flash.now[:danger] = 'You are not authorized to use billing dashboard'
