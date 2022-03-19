@@ -44,13 +44,13 @@ belongs_to :task (optional)
 
 # Task
 ...
-assign_amount (possibly move to task_price?)
-complete_amount (possibly move to task_price?)
+assign_amount
+complete_amount
 has_many :transactions
 belongs_to :account
 
 # Cycle
-amount (cash the total of transactions)
+amount (cash the total of transactions for billing cycle)
 closed (enum with true of false, make a payout on change to true)
 has_many :transactions
 belongs_to :billing_account

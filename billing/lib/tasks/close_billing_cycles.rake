@@ -21,6 +21,7 @@ task close_billing_cycles: :environment do
         end
       end
 
+      # ----------------------------- produce event -----------------------
       event = {
         event_name: 'CyclesClosed',
         event_id: SecureRandom.uuid,
@@ -41,7 +42,9 @@ task close_billing_cycles: :environment do
         WaterDrop::SyncProducer.call(event.to_json, topic: 'cycles')
       else
         Rails.logger.error('Invalid payload for "cycles" event: ' + result.failure.join('; '))
+        # store events in DB or produce invalid event to "invalid-events-topic"
       end
+      # --------------------------------------------------------------------
     rescue StandardError => e
       Rails.logger.error(e)
     end

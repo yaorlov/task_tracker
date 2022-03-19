@@ -45,6 +45,7 @@ class TasksController < ApplicationController
         WaterDrop::SyncProducer.call(event.to_json, topic: 'tasks-stream')
       else
         logger.error('Invalid payload for "tasks" event: ' + result.failure.join('; '))
+        # store events in DB or produce invalid event to "invalid-events-topic"
       end
       # --------------------------------------------------------------------
     
@@ -82,6 +83,7 @@ class TasksController < ApplicationController
       WaterDrop::SyncProducer.call(event.to_json, topic: 'tasks')
     else
       logger.error('Invalid payload for "tasks" event: ' + result.failure.join('; '))
+      # store events in DB or produce invalid event to "invalid-events-topic"
     end
     # --------------------------------------------------------------------
 
@@ -122,7 +124,8 @@ class TasksController < ApplicationController
       if result.success?
         WaterDrop::AsyncProducer.call(event.to_json, topic: 'tasks')
       else
-        logger.error('Invalid payload for "tasks" event: ' + result.failure.join('; '))
+        logger.error('Invalid payload for "tasks" event: ' + result.failure.join('; ')
+        # store events in DB or produce invalid event to "invalid-events-topic"
       end
       # --------------------------------------------------------------------
     end

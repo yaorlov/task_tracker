@@ -59,6 +59,7 @@ class AccountsController < ApplicationController
           producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
         else
           logger.error('Invalid payload for "accounts-stream" event: ' + result.failure.join('; '))
+          # store events in DB or produce invalid event to "invalid-events-topic"
         end
 
         if new_role
@@ -77,6 +78,7 @@ class AccountsController < ApplicationController
             producer.produce_sync(payload: event.to_json, topic: 'accounts')
           else
             logger.error('Invalid payload for "accounts" event: ' + result.failure.join('; '))
+            # store events in DB or produce invalid event to "invalid-events-topic"
           end
         end
 
@@ -124,6 +126,7 @@ class AccountsController < ApplicationController
       producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
     else
       logger.error('Invalid payload for "accounts-stream" event: ' + result.failure.join('; '))
+      # store events in DB or produce invalid event to "invalid-events-topic"
     end
 
     producer.close
