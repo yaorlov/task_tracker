@@ -211,8 +211,8 @@ CREATE TABLE public.tasks (
     description text NOT NULL,
     status integer NOT NULL,
     public_id uuid NOT NULL,
-    assign_price integer,
-    complete_price integer,
+    assign_price integer NOT NULL,
+    complete_price integer NOT NULL,
     account_id bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
