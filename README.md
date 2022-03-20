@@ -29,9 +29,12 @@ http://localhost:3000/oauth/applications - oauth app managment
 Task Tracking service
 http://localhost:5000 - main
 http://localhost:5000/login - oauth login
-```
 
 Billing service
 http://localhost:4000 - main
 http://localhost:4000/login - oauth login
+
+Analytics service
+http://localhost:6000 - main
+http://localhost:6000/login - oauth login
 ```
