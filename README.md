@@ -35,6 +35,6 @@ http://localhost:4000 - main
 http://localhost:4000/login - oauth login
 
 Analytics service
-http://localhost:6000 - main
-http://localhost:6000/login - oauth login
+http://localhost:7000 - main
+http://localhost:7000/login - oauth login
 ```

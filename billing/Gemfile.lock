@@ -362,14 +362,15 @@ DEPENDENCIES
   bootsnap
   bootstrap (~> 5.1.0)
   dotenv-rails
-  dry-monads
+  dry-monads (~> 1.4)
   factory_bot_rails
   ffaker
   importmap-rails
   jbuilder
   karafka (~> 1.4)
-  omniauth-oauth2
-  omniauth-rails_csrf_protection
+  oauth2 (= 1.4.7)
+  omniauth-oauth2 (~> 1.7)
+  omniauth-rails_csrf_protection (~> 1.0)
   pg (~> 1.1)
   pry (~> 0.13.1)
   puma (~> 5.0)
@@ -381,7 +382,7 @@ DEPENDENCIES
   stimulus-rails
   turbo-rails
   tzinfo-data
-  waterdrop
+  waterdrop (~> 1.4)
   web-console
   whenever
 

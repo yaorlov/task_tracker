@@ -14,7 +14,7 @@
 2. Create a new oAuth application with:
 ```
 name: analytics
-redirect URI: http://localhost:6000/auth/keepa/callback
+redirect URI: http://localhost:7000/auth/keepa/callback
 scopes: public write
 ```
 3. Copy `UID` to `AUTH_KEY` env variable

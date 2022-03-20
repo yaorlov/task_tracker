@@ -40,17 +40,18 @@ gem "bootsnap", require: false
 # Karafka
 gem 'schema_registry', path: '../event_schema_registry/ruby/'
 gem 'karafka', '~> 1.4'
-gem 'waterdrop'
+gem 'waterdrop', '~> 1.4'
 
 # Bootstrap styles
 gem 'bootstrap', '~> 5.1.0'
 
 # Authentication
-gem 'omniauth-oauth2'
-gem 'omniauth-rails_csrf_protection'
+gem 'oauth2', '1.4.7'
+gem 'omniauth-oauth2', '~> 1.7'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 # dry-rb gems
-gem 'dry-monads'
+gem 'dry-monads', '~> 1.4'
 
 # crontab
 gem 'whenever', require: false

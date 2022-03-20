@@ -14,6 +14,8 @@ require "action_view/railtie"
 require "action_cable/engine"
 # require "rails/test_unit/railtie"
 
+require './lib/omni_auth/strategies/keepa'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -33,5 +35,9 @@ module Analytics
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    middleware.use OmniAuth::Builder do
+      provider :keepa, ENV.fetch('AUTH_KEY'), ENV.fetch('AUTH_SECRET'), scope: 'public write'
+    end
   end
 end

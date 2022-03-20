@@ -50,11 +50,27 @@ gem "bootsnap", require: false
 
 # Karafka
 gem 'karafka', '~> 1.4'
+gem 'schema_registry', path: '../event_schema_registry/ruby/'
+
+# Bootstrap styles
+gem 'bootstrap', '~> 5.1'
+
+# Authentication
+gem 'oauth2', '1.4.7'
+gem 'omniauth-oauth2', '~> 1.7'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
+
+# dry-rb gems
+gem 'dry-monads', '~> 1.4'
 
 group :development, :test do
+  gem 'factory_bot_rails'
+  gem 'ffaker'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem 'dotenv-rails'
+  gem 'pry', '~> 0.13'
+  gem 'rspec-rails', '~> 5.0'
 end
 
 group :development do
