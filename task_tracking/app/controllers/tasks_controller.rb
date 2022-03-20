@@ -2,13 +2,17 @@
 
 class TasksController < ApplicationController
   before_action :set_task, only: %i[in_progress done]
-  before_action :set_current_account, only: %i[index new]
+  before_action :set_current_account, only: %i[index new create]
 
   def index
-    @tasks = Task.all.includes(:assignee)
+    return redirect_to login_path unless session[:account]
+
+    @tasks = Task.all.includes(:assignee).order(created_at: :desc)
   end
 
   def new
+    return redirect_to login_path unless session[:account]
+
     @task = Task.new
   end
 
@@ -17,6 +21,7 @@ class TasksController < ApplicationController
 
     if @task.valid?
       @task.save!
+      @task.reload # reload is needed to get the assigned public_id
 
       # ----------------------------- produce event -----------------------
       event = {
@@ -40,6 +45,7 @@ class TasksController < ApplicationController
         WaterDrop::SyncProducer.call(event.to_json, topic: 'tasks-stream')
       else
         logger.error('Invalid payload for "tasks" event: ' + result.failure.join('; '))
+        # store events in DB or produce invalid event to "invalid-events-topic"
       end
       # --------------------------------------------------------------------
     
@@ -66,7 +72,9 @@ class TasksController < ApplicationController
       producer: 'task_tracking_service',
       data: {
         public_id: @task.public_id,
-        status: @task.status,
+        assignee: {
+          public_id: @task.assignee.public_id
+        }
       }
     }
     result = SchemaRegistry.validate_event(event, 'tasks.completed', version: 1)
@@ -75,6 +83,7 @@ class TasksController < ApplicationController
       WaterDrop::SyncProducer.call(event.to_json, topic: 'tasks')
     else
       logger.error('Invalid payload for "tasks" event: ' + result.failure.join('; '))
+      # store events in DB or produce invalid event to "invalid-events-topic"
     end
     # --------------------------------------------------------------------
 
@@ -83,6 +92,13 @@ class TasksController < ApplicationController
 
   def reassign
     tasks = Task.in_progress.select(:id, :public_id, :description, :status, :created_at).as_json
+
+    if tasks.empty?
+      flash[:warning] = 'There are no tasks in-progress. Nothing to re-assign'
+      redirect_to tasks_path
+      return
+    end
+
     account_ids = Account.worker.pluck(:id, :public_id).to_h
     payload = tasks.map { |task| task.merge(account_id: account_ids.keys.sample) }
     result = Task.upsert_all(payload, unique_by: :id, returning: %i[public_id account_id])
@@ -109,6 +125,7 @@ class TasksController < ApplicationController
         WaterDrop::AsyncProducer.call(event.to_json, topic: 'tasks')
       else
         logger.error('Invalid payload for "tasks" event: ' + result.failure.join('; '))
+        # store events in DB or produce invalid event to "invalid-events-topic"
       end
       # --------------------------------------------------------------------
     end

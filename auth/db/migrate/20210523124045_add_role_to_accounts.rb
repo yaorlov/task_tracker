@@ -2,7 +2,7 @@ class AddRoleToAccounts < ActiveRecord::Migration[6.1]
   def up
     execute <<~SQL
       DO $$ BEGIN
-        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'foo_bar_enum_status') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'account_roles') THEN
           CREATE TYPE account_roles AS ENUM ('admin', 'manager', 'finance', 'worker');
         END IF;
       END $$;

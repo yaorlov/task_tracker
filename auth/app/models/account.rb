@@ -14,6 +14,7 @@ class Account < ApplicationRecord
   }
 
   after_create do
+    # ----------------------------- produce event -----------------------
     producer = WaterDrop::Producer.new do |config|
       config.deliver = true
       config.kafka = {
@@ -37,8 +38,10 @@ class Account < ApplicationRecord
       producer.produce_sync(payload: event.to_json, topic: 'accounts-stream')
     else
       logger.error('Invalid payload for "accounts-stream" event: ' + result.failure.join('; '))
+      # store events in DB or produce invalid event to "invalid-events-topic"
     end
 
     producer.close
+    # --------------------------------------------------------------------
   end
 end
