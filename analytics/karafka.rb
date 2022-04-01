@@ -51,9 +51,21 @@ class KarafkaApp < Karafka::App
         consumer AccountChangesConsumer
       end
 
+      topic 'tasks-stream' do
+        consumer EventsConsumer
+      end
+
       # Business events
       topic 'accounts' do
         consumer AccountChangesConsumer
+      end
+
+      topic 'tasks' do
+        consumer EventsConsumer
+      end
+
+      topic 'cycles' do
+        consumer EventsConsumer
       end
     end
   end

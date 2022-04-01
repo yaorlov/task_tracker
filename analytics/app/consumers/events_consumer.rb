@@ -1,54 +1,58 @@
 # frozen_string_literal: true
 
-# AccountChangesConsumer consumes account-related changes and
-# stores Kafka events in the events table
-class AccountChangesConsumer < ApplicationConsumer
+# EventsConsumer stores all of the events that are not consumed in AccountChangesConsumer
+# we need all events to create new projections or
+# update the existing ones if the requirements change
+class EventsConsumer < ApplicationConsumer
   def consume
     params_batch.each do |message|
       puts '-' * 80
       p message
       puts '-' * 80
 
-      account = Account.find_by(public_id: message.payload['data']['public_id'])
-
       case [message.payload['event_name'], message.payload['event_version']]
-      when ['AccountsCreated', 1]
-        result = SchemaRegistry.validate_event(message.payload, 'accounts.created', version: 1)
+      when ['CyclesClosed', 1]
+        result = SchemaRegistry.validate_event(message.payload, 'cycles.closed', version: 1)
 
         if result.success?
-          Rails.logger.info('AccountsCreated')
+          Rails.logger.info('CyclesClosed')
           save_event(message)
-          Account.create!(message.payload['data'])
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
         end
-      when ['AccountsUpdated', 1]
-        result = SchemaRegistry.validate_event(message.payload, 'accounts.updated', version: 1)
+      when ['TasksAssigned', 1]
+        result = SchemaRegistry.validate_event(message.payload, 'tasks.assigned', version: 1)
 
         if result.success?
-          Rails.logger.info('AccountsUpdated')
+          Rails.logger.info('TasksAssigned')
           save_event(message)
-          account.update!(full_name: message.payload['data']['full_name']) if account
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
         end
-      when ['AccountsDeleted', 1]
-        result = SchemaRegistry.validate_event(message.payload, 'accounts.deleted', version: 1)
+      when ['TasksCompleted', 1]
+        result = SchemaRegistry.validate_event(message.payload, 'tasks.completed', version: 1)
 
         if result.success?
-          Rails.logger.info('AccountsDeleted')
+          Rails.logger.info('TasksCompleted')
           save_event(message)
-          account.destroy! if account
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
         end
-      when ['AccountsRoleChanged', 1]
-        result = SchemaRegistry.validate_event(message.payload, 'accounts.role_changed', version: 1)
+      when ['TasksCreated', 1]
+        result = SchemaRegistry.validate_event(message.payload, 'tasks.created', version: 1)
 
         if result.success?
-          Rails.logger.info('AccountsRoleChanged')
+          Rails.logger.info('TasksCreated')
           save_event(message)
-          account.update!(role: message.payload['data']['role']) if account
+        else
+          # store events in DB or produce invalid event to "invalid-events-topic"
+        end
+      when ['TasksUpdated', 1]
+        result = SchemaRegistry.validate_event(message.payload, 'tasks.updated', version: 1)
+
+        if result.success?
+          Rails.logger.info('TasksUpdated')
+          save_event(message)
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
         end
