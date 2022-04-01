@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_20_161358) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_21_204737) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,6 +38,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_20_161358) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_auth_identities_on_account_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "stream_id", null: false, comment: "public id of the entity/aggregate"
+    t.integer "version", null: false, comment: "used to sort the events of the specific stream"
+    t.jsonb "data", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stream_id", "version"], name: "index_events_on_stream_id_and_version", unique: true
   end
 
   add_foreign_key "auth_identities", "accounts"
