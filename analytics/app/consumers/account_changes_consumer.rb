@@ -17,8 +17,10 @@ class AccountChangesConsumer < ApplicationConsumer
 
         if result.success?
           Rails.logger.info('AccountsCreated')
-          save_event(message)
-          Account.create!(message.payload['data'])
+          ActiveRecord::Base.transaction do
+            save_event!(message)
+            Account.create!(message.payload['data'])
+          end
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
         end
@@ -27,8 +29,10 @@ class AccountChangesConsumer < ApplicationConsumer
 
         if result.success?
           Rails.logger.info('AccountsUpdated')
-          save_event(message)
-          account.update!(full_name: message.payload['data']['full_name']) if account
+          ActiveRecord::Base.transaction do
+            save_event!(message)
+            account.update!(full_name: message.payload['data']['full_name']) if account
+          end
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
         end
@@ -37,8 +41,10 @@ class AccountChangesConsumer < ApplicationConsumer
 
         if result.success?
           Rails.logger.info('AccountsDeleted')
-          save_event(message)
-          account.destroy! if account
+          ActiveRecord::Base.transaction do
+            save_event!(message)
+            account.destroy! if account
+          end
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
         end
@@ -47,8 +53,10 @@ class AccountChangesConsumer < ApplicationConsumer
 
         if result.success?
           Rails.logger.info('AccountsRoleChanged')
-          save_event(message)
-          account.update!(role: message.payload['data']['role']) if account
+          ActiveRecord::Base.transaction do
+            save_event!(message)
+            account.update!(role: message.payload['data']['role']) if account
+          end
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
         end
@@ -60,15 +68,13 @@ class AccountChangesConsumer < ApplicationConsumer
 
   private
 
-  def save_event(message)
+  def save_event!(message)
     # read and write are executed within one transaction to prevent using the stale version
-    ActiveRecord::Base.transaction do
-      current_version = Event.where(stream_id: message.payload['data']['public_id']).maximum(:version) || 0
-      Event.create!(
-        stream_id: message.payload['data']['public_id'],
-        version: current_version + 1,
-        data: message.payload
-      )
-    end
+    current_version = Event.where(stream_id: message.payload['data']['public_id']).maximum(:version) || 0
+    Event.create!(
+      stream_id: message.payload['data']['public_id'],
+      version: current_version + 1,
+      data: message.payload
+    )
   end
 end
