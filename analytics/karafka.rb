@@ -65,7 +65,7 @@ class KarafkaApp < Karafka::App
       end
 
       topic 'cycles' do
-        consumer EventsConsumer
+        consumer CycleChangesConsumer
       end
     end
   end

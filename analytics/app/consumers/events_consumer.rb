@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# EventsConsumer stores all of the events that are not consumed in AccountChangesConsumer
+# EventsConsumer stores all of the events that are not consumed in AccountChangesConsumer and CycleChangesConsumer
 # we need all events to create new projections or
 # update the existing ones if the requirements change
 class EventsConsumer < ApplicationConsumer
@@ -11,15 +11,6 @@ class EventsConsumer < ApplicationConsumer
       puts '-' * 80
 
       case [message.payload['event_name'], message.payload['event_version']]
-      when ['CyclesClosed', 1]
-        result = SchemaRegistry.validate_event(message.payload, 'cycles.closed', version: 1)
-
-        if result.success?
-          Rails.logger.info('CyclesClosed')
-          save_event(message)
-        else
-          # store events in DB or produce invalid event to "invalid-events-topic"
-        end
       when ['TasksAssigned', 1]
         result = SchemaRegistry.validate_event(message.payload, 'tasks.assigned', version: 1)
 
