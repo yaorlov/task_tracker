@@ -52,7 +52,7 @@ class KarafkaApp < Karafka::App
       end
 
       topic 'tasks-stream' do
-        consumer EventsConsumer
+        consumer TaskChangesConsumer
       end
 
       # Business events
@@ -61,7 +61,7 @@ class KarafkaApp < Karafka::App
       end
 
       topic 'tasks' do
-        consumer EventsConsumer
+        consumer TaskChangesConsumer
       end
 
       topic 'cycles' do

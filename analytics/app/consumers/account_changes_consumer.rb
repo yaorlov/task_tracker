@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# AccountChangesConsumer consumes account-related changes and
+# AccountChangesConsumer consumes all events from the "accounts" and "accounts-stream" topics and
 # stores Kafka events in the events table
 class AccountChangesConsumer < ApplicationConsumer
   def consume
@@ -8,8 +8,6 @@ class AccountChangesConsumer < ApplicationConsumer
       puts '-' * 80
       p message
       puts '-' * 80
-
-      account = Account.find_by(public_id: message.payload['data']['public_id'])
 
       case [message.payload['event_name'], message.payload['event_version']]
       when ['AccountsCreated', 1]
@@ -31,7 +29,7 @@ class AccountChangesConsumer < ApplicationConsumer
           Rails.logger.info('AccountsUpdated')
           ActiveRecord::Base.transaction do
             save_event!(message)
-            account.update!(full_name: message.payload['data']['full_name']) if account
+            account(message).update!(full_name: message.payload['data']['full_name']) if account
           end
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
@@ -43,7 +41,7 @@ class AccountChangesConsumer < ApplicationConsumer
           Rails.logger.info('AccountsDeleted')
           ActiveRecord::Base.transaction do
             save_event!(message)
-            account.destroy! if account
+            account(message).destroy! if account
           end
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
@@ -55,7 +53,7 @@ class AccountChangesConsumer < ApplicationConsumer
           Rails.logger.info('AccountsRoleChanged')
           ActiveRecord::Base.transaction do
             save_event!(message)
-            account.update!(role: message.payload['data']['role']) if account
+            account(message).update!(role: message.payload['data']['role']) if account
           end
         else
           # store events in DB or produce invalid event to "invalid-events-topic"
@@ -67,6 +65,10 @@ class AccountChangesConsumer < ApplicationConsumer
   end
 
   private
+
+  def account(mesage)
+    Account.find_by(public_id: message.payload['data']['public_id'])
+  end
 
   def save_event!(message)
     # read and write are executed within one transaction to prevent using the stale version

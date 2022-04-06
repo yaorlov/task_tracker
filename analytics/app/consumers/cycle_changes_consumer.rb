@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# CycleChangesConsumer consumes CyclesClosed events for management_incomes projection and
-# stores CyclesClosed events in the events table
+# CyclesClosed event is used to create the management_incomes projection and is stored in the events table
+# We need to store all events to create new projections or update the existing ones if the requirements change
 class CycleChangesConsumer < ApplicationConsumer
   def consume
     params_batch.each do |message|
