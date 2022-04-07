@@ -19,13 +19,3 @@ scopes: public write
 ```
 3. Copy `UID` to `AUTH_KEY` env variable
 4. Copy `Secret` to `AUTH_SECRET` env variable
-
-=========================================
-
-TODO:
-1. Analytics Service can accept TaskCreated and TaskUpdated in different order. If update is received first, we create the task. Then we add missing fields when TaskCreated is received.
-Video: https://youtu.be/1jkqk-7Cckk?t=4537
-2. In Analytics Service persist raw events + data for every dashboard. Raw events are needed for new dashboards or to modify an existing one.
-Video: https://youtu.be/hW12Tk4UgnA?t=3004
-
-How to deprecate schema versions: https://youtu.be/1jkqk-7Cckk?t=5756
