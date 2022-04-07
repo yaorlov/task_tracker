@@ -1,0 +1,44 @@
+<h1>
+  Analytics Home Page
+</h1>
+
+<hr/>
+
+<h3>
+  Management income today
+</h3>
+<p><%= "$#{@management_income}" %></p>
+
+<hr/>
+
+<h3>
+  The most expensive tasks
+</h3>
+
+<p><strong>Today</strong></p>
+<% if @most_expensive_task_today %>
+  <p><%= "Description: #{@most_expensive_task_today.description}" %></p>
+  <p><%= "Price: $#{@most_expensive_task_today.complete_price / 100.0} "%></p>
+<% else %>
+  <p>No data</p>
+<% end %>
+
+<hr/>
+
+<p><strong>This week</strong></p>
+<% if @most_expensive_task_this_week %>
+  <p><%= "Description: #{@most_expensive_task_this_week.description}" %></p>
+  <p><%= "Price: $#{@most_expensive_task_this_week.complete_price / 100.0} "%></p>
+<% else %>
+  <p>No data</p>
+<% end %>
+
+<hr/>
+
+<p><strong>This month</strong></p>
+<% if @most_expensive_task_this_month %>
+  <p><%= "Description: #{@most_expensive_task_this_month.description}" %></p>
+  <p><%= "Price: $#{@most_expensive_task_this_month.complete_price / 100.0} "%></p>
+<% else %>
+  <p>No data</p>
+<% end %>

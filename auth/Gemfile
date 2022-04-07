@@ -25,7 +25,8 @@ gem 'jbuilder', '~> 2.7'
 # Auth
 gem 'devise'
 gem 'doorkeeper'
-gem 'omniauth-oauth2'
+gem 'omniauth-oauth2', '~> 1.7'
+gem 'oauth2', '1.4.7'
 
 # Kafka
 gem 'schema_registry', path: '../event_schema_registry/ruby/'

@@ -385,14 +385,15 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   bootstrap (~> 5.1.0)
   dotenv-rails
-  dry-monads
+  dry-monads (~> 1.4)
   factory_bot_rails
   ffaker
   jbuilder (~> 2.7)
   karafka (~> 1.4)
   listen (~> 3.3)
-  omniauth-oauth2
-  omniauth-rails_csrf_protection
+  oauth2 (= 1.4.7)
+  omniauth-oauth2 (~> 1.7)
+  omniauth-rails_csrf_protection (~> 1.0)
   pg (~> 1.1)
   pry-byebug
   pry-rails
@@ -408,7 +409,7 @@ DEPENDENCIES
   spring
   turbolinks (~> 5)
   tzinfo-data
-  waterdrop
+  waterdrop (~> 1.4)
   web-console (>= 4.1.0)
   webpacker (~> 5.0)
 
