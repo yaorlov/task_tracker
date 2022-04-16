@@ -15,7 +15,7 @@ class PagesController < ApplicationController
     if @current_account['role'] == Account.roles[:admin]
       flash.now[:info] = 'Welcome!'
     else
-      flash.now[:danger] = 'You are not authorized to use billing dashboard'
+      flash.now[:danger] = 'You are not authorized to use analytics dashboard'
     end
   end
 
