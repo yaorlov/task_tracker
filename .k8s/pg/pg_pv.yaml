@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pg-pv
+  labels:
+    app: pg
+  namespace: task-tracker
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 150Mi
+  accessModes:
+    - ReadWriteOnce #<- means only one node
+  hostPath: # for Minikube, emulate net. attached vol.
+    path: "/tmp/data"

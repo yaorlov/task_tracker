@@ -38,7 +38,7 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
 
 # Karafka
-gem 'schema_registry', path: '../event_schema_registry/ruby/'
+gem 'schema_registry', git: "https://github.com/yaorlov/task_tracker_schema_registry.git"
 gem 'karafka', '~> 1.4'
 gem 'waterdrop', '~> 1.4'
 
@@ -56,12 +56,13 @@ gem 'dry-monads', '~> 1.4'
 # crontab
 gem 'whenever', require: false
 
+gem 'dotenv-rails'
+
 group :development, :test do
   gem 'factory_bot_rails'
   gem 'ffaker'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'pry', '~> 0.13.1'
-  gem 'dotenv-rails'
   gem 'rspec-rails', '~> 5.0.0'
 end
 

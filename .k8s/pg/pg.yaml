@@ -1,0 +1,79 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: pg-svc
+  labels:
+    app: pg # <- must match with the pod
+  namespace: task-tracker
+spec:
+  ports:
+    - protocol: TCP
+      port: 5432 # <- service port opened for Rails
+  selector:
+    # the set of pods with the name 'pg' is targeted by this service
+    app: pg
+---
+# Deployment
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  # about the deployment itself. Gives a name of the DEPLOYMENT
+  name: pg-dep
+  labels:
+    app: pg
+  namespace: task-tracker
+spec: # of the deployment
+  serviceName: pg-dep
+  replicas: 1
+  selector:
+    # the deployment must match all pods with the label "app: pg"
+    matchLabels:
+      # the label for the POD that the deployment is targeting
+      app: pg # match spec.template.labels for the pod
+  template: # blue print of a pod
+    metadata:
+      name: pg-pod
+      # label for the POD that the deployment is deploying
+      labels:
+        app: pg # match spec.selector.matchlabels
+    spec:
+      volumes:
+        - name: pg-pv # must match PV
+          persistentVolumeClaim:
+            claimName: pg-pvc # must match PVC
+      containers:
+      - name: pg-container
+        image: postgres:13.3-alpine
+        imagePullPolicy: "IfNotPresent"
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+          - mountPath: $(PGDATA)
+            name: pg-pv # must match pv
+            readOnly: false
+        envFrom:
+          - configMapRef:
+              name: pg-config
+        readinessProbe:
+          exec:
+            command: ["pg_isready", "-U", "postgres"]
+          periodSeconds: 30
+          timeoutSeconds: 10
+          initialDelaySeconds: 30
+        resources:
+          requests:
+            cpu: 100m
+---
+# we bind the resource PV to the pod
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pg-pvc
+  namespace: task-tracker
+spec:
+  #storageClassName: standard
+  accessModes:
+    - ReadWriteOnce #<- means only one node
+  resources:
+    requests:
+      storage: 100Mi

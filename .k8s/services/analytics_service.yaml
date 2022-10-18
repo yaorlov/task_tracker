@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: analytics-svc
+  namespace: task-tracker
+spec:
+  selector:
+    app: analytics
+  type: NodePort
+  #type: LoadBalancer on AWS
+  ports:
+    - name: http
+      protocol: TCP
+      # port exposed by the service
+      port: 7000
+      # the port the app is listening on targetPort
+      targetPort: 7000

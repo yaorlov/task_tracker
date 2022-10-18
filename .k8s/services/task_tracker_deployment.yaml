@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-tracker-deployment
+  labels: # must match the service
+    app: task-tracker
+  namespace: task-tracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels: # which pods are we deploying
+      app: task-tracker
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels: # must match service and replicaset matchlabel
+        app: task-tracker
+    spec:
+      containers:
+      - name: task-tracker
+        image: task_tracking
+        imagePullPolicy: Never # use local docker image
+        resources:
+          requests:
+            cpu: 500m
+        ports:
+          - containerPort: 5000
+        envFrom:
+          - configMapRef:
+              name: task-tracker-config
+        readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 2

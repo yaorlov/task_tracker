@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: analytics-db-setup
+  namespace: task-tracker
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: analytics-db-setup
+          image: analytics
+          imagePullPolicy: IfNotPresent
+          command: ["bundle", "exec", "rails", "db:setup"]
+          envFrom:
+            - configMapRef:
+                name: analytics-config

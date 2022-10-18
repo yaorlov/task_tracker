@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-deployment
+  labels: # must match the service
+    app: billing
+  namespace: task-tracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels: # which pods are we deploying
+      app: billing
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels: # must match service and replicaset matchlabel
+        app: billing
+    spec:
+      containers:
+      - name: billing
+        image: billing
+        imagePullPolicy: Never # use local docker image
+        resources:
+          requests:
+            cpu: 500m
+        ports:
+          - containerPort: 4000
+        envFrom:
+          - configMapRef:
+              name: billing-config
+        readinessProbe:
+            httpGet:
+              path: /
+              port: 4000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 2

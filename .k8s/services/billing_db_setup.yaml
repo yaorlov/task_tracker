@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: billing-db-setup
+  namespace: task-tracker
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: billing-db-setup
+          image: billing
+          imagePullPolicy: IfNotPresent
+          command: ["bundle", "exec", "rails", "db:setup"]
+          envFrom:
+            - configMapRef:
+                name: billing-config
