@@ -11,7 +11,7 @@ spec:
         - name: task-tracker-db-setup
           image: task_tracking
           imagePullPolicy: IfNotPresent
-          command: ["bundle", "exec", "rails", "db:setup"]
+          command: ["bundle", "exec", "rails", "db:create", "db:migrate"]
           envFrom:
             - configMapRef:
                 name: task-tracker-config

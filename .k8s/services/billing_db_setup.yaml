@@ -11,7 +11,7 @@ spec:
         - name: billing-db-setup
           image: billing
           imagePullPolicy: IfNotPresent
-          command: ["bundle", "exec", "rails", "db:setup"]
+          command: ["bundle", "exec", "rails", "db:create", "db:migrate"]
           envFrom:
             - configMapRef:
                 name: billing-config

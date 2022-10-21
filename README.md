@@ -58,3 +58,13 @@ Vanilla HTTP is used for sync communications. Kafka with schema registry is used
 
 Every microservice is using Postgres as the database. Please check the README files in every microservice directory for more details on database setup.
 
+## K8s
+`minikube` and `tilt` are required to run services in local k8s cluster. After the dependencies are installed run:
+```bash
+minikube start
+tilt up
+```
+To delete resources created by 'tilt up' run:
+```bash
+tilt down
+```

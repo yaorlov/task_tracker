@@ -15,3 +15,4 @@ spec:
       port: 5000
       # the port the app is listening on targetPort
       targetPort: 5000
+      nodePort: 30004

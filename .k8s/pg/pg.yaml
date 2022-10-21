@@ -18,12 +18,12 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   # about the deployment itself. Gives a name of the DEPLOYMENT
-  name: pg-dep
+  name: pg-deployment
   labels:
     app: pg
   namespace: task-tracker
 spec: # of the deployment
-  serviceName: pg-dep
+  serviceName: pg-deployment
   replicas: 1
   selector:
     # the deployment must match all pods with the label "app: pg"
