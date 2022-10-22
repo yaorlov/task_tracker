@@ -22,6 +22,9 @@ metadata:
   labels:
     app: pg
   namespace: task-tracker
+  annotations:
+    # prevent Postgres rebuild after `tilt down`
+    tilt.dev/down-policy: keep
 spec: # of the deployment
   serviceName: pg-deployment
   replicas: 1
