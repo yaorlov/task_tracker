@@ -1,14 +1,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: auth-db-create
+  name: auth-db-setup
   namespace: task-tracker
 spec:
   template:
     spec:
       restartPolicy: Never
       containers:
-        - name: auth-db-create
+        - name: auth-db-setup
           image: auth
           imagePullPolicy: IfNotPresent
           command: ["bundle", "exec", "rails", "db:create", "db:migrate"]

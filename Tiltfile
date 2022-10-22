@@ -35,11 +35,14 @@ docker_build('task_tracking',
 
 # deployments dependencies
 k8s_resource('kafka-broker', resource_deps=['zookeeper'])
-k8s_resource('auth-db-create', resource_deps=['pg-deployment'])
-k8s_resource('auth-deployment', resource_deps=['kafka-broker', 'pg-deployment', 'auth-db-setup'])
-k8s_resource('analytics-deployment', resource_deps=['kafka-broker', 'pg-deployment', 'analytics-db-setup'])
-k8s_resource('billing-deployment', resource_deps=['kafka-broker', 'pg-deployment', 'billing-db-setup'])
-k8s_resource('task-tracker-deployment', resource_deps=['kafka-broker', 'pg-deployment', 'task-tracker-db-setup'])
+k8s_resource('auth-db-setup', resource_deps=['pg-deployment'])
+k8s_resource('auth-deployment', resource_deps=['kafka-broker', 'auth-db-setup'])
+k8s_resource('analytics-db-setup', resource_deps=['pg-deployment'])
+k8s_resource('analytics-deployment', resource_deps=['kafka-broker', 'analytics-db-setup'])
+k8s_resource('billing-db-setup', resource_deps=['pg-deployment'])
+k8s_resource('billing-deployment', resource_deps=['kafka-broker', 'billing-db-setup'])
+k8s_resource('task-tracker-db-setup', resource_deps=['pg-deployment'])
+k8s_resource('task-tracker-deployment', resource_deps=['kafka-broker', 'task-tracker-db-setup'])
 
 # apply processes
 k8s_yaml([
@@ -73,6 +76,14 @@ local_resource('All pods',
     'billing-deployment',
     'task-tracker-deployment'
   ]
+)
+
+local_resource('Seed auth database',
+  'bundle exec rails db:seed',
+  resource_deps=['auth-deployment'],
+  dir='./auth/',
+  trigger_mode=TRIGGER_MODE_MANUAL,
+  auto_init=False
 )
 # ->
 
