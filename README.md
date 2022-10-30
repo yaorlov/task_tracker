@@ -61,7 +61,7 @@ Every microservice is using Postgres as the database. Please check the README fi
 ## K8s
 `minikube` and `tilt` are required to run services in local k8s cluster. After the dependencies are installed run:
 ```bash
-minikube start
+minikube start --kubernetes-version v1.24.3 --feature-gates=ServiceIPStaticSubrange=true
 tilt up
 ```
 To delete resources created by 'tilt up' run:
