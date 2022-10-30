@@ -14,7 +14,9 @@ k8s_yaml(['./.k8s/pg/pg.yaml'])
 docker_build('auth',
    './auth/',
    build_args={},
-   dockerfile='./auth/Dockerfile'
+   dockerfile='./auth/Dockerfile',
+   live_update=[sync('auth/app', '/var/www/auth/app/')],
+   ignore=['tmp','log']
 )
 docker_build('analytics',
    './analytics/',
@@ -62,10 +64,19 @@ k8s_yaml([
   './.k8s/services/task_tracker_service.yaml',
   # db jobs
   './.k8s/services/auth_db_setup.yaml',
+  './.k8s/services/auth_db_seed.yaml',
   './.k8s/services/analytics_db_setup.yaml',
   './.k8s/services/billing_db_setup.yaml',
   './.k8s/services/task_tracker_db_setup.yaml'
 ])
+
+# <- creates manual/auto action button in the Tilt GUI
+# migration
+k8s_resource('auth-db-seed', 
+   resource_deps=['auth-db-setup'],
+   trigger_mode=TRIGGER_MODE_MANUAL,
+   auto_init=False
+)
 
 # auto/manual display pods in GUI
 local_resource('All pods',
@@ -76,14 +87,6 @@ local_resource('All pods',
     'billing-deployment',
     'task-tracker-deployment'
   ]
-)
-
-local_resource('Seed auth database',
-  'bundle exec rails db:seed',
-  resource_deps=['auth-deployment'],
-  dir='./auth/',
-  trigger_mode=TRIGGER_MODE_MANUAL,
-  auto_init=False
 )
 # ->
 

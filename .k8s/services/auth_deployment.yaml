@@ -20,6 +20,10 @@ spec:
       labels: # must match service and replicaset matchlabel
         app: auth
     spec:
+      hostAliases:
+        - ip: "10.96.0.16" # clusterIP of kafka service
+          hostnames:
+          - "kafka-broker"
       containers:
       - name: auth
         image: auth

@@ -2,11 +2,17 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: kafka-broker
+    app: kafka-service
   name: kafka-service
   namespace: task-tracker
 spec:
-  ports:
-  - port: 9092
+  # Kafka bootstrap endpoint returns `kafka-broker:9092` as a broker address.
+  # `kafka-broker` is resolved to 127.0.0.1, which is not the IP of Kafka service.
+  # I'm using static IP here so that the applications' deployments can have a hostAlias that
+  # resolves `kafka-broker` hostname to the actual IP of Kafka service (10.96.0.16).
+  clusterIP: 10.96.0.16
   selector:
-    app: kafka-broker
+    app: kafka-broker # should match deployment label
+  ports:
+    - port: 9092
+      targetPort: 9092

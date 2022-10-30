@@ -19,6 +19,9 @@ RUN apt-get update -qq \
     curl \
     less \
     git \
+    kafkacat \
+    iputils-ping \
+    telnet \
   && apt-get clean \
   && rm -rf /var/cache/apt/archives/* \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \

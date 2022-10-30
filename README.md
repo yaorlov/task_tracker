@@ -68,3 +68,6 @@ To delete resources created by 'tilt up' run:
 ```bash
 tilt down
 ```
+To create database and run migrations trigger update on `auth-db-setup` resource in Tilt.
+To create users in database trigger update on `auth-db-seed` resource in Tilt.
+

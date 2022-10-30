@@ -35,7 +35,7 @@ class AccountsController < ApplicationController
         producer = WaterDrop::Producer.new do |config|
           config.deliver = true
           config.kafka = {
-            'bootstrap.servers': 'localhost:9092',
+            'bootstrap.servers': ENV.fetch('KAFKA_URL'),
             'request.required.acks': 1
           }
         end
@@ -106,7 +106,7 @@ class AccountsController < ApplicationController
     producer = WaterDrop::Producer.new do |config|
       config.deliver = true
       config.kafka = {
-        'bootstrap.servers': 'localhost:9092',
+        'bootstrap.servers': ENV.fetch('KAFKA_URL'),
         'request.required.acks': 1
       }
     end
