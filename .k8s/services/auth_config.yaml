@@ -8,4 +8,5 @@ data:
   AUTH_DATABASE_PASSWORD: ''
   KAFKA_URL: 'kafka-broker:9092'
   RAILS_ENV: "development"
+  RAILS_PORT: '31000'
   RAILS_LOG_TO_STDOUT: "true"

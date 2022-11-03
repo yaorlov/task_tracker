@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :account do
     email { FFaker::Internet.unique.email }
-    password { 7_777_777 }
+    password { '7_777_777' }
     role { Account.roles.values.sample }
     full_name { FFaker::Name.name }
     position { FFaker::Company.position }
