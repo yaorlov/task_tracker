@@ -3,8 +3,11 @@ k8s_yaml([
   './.k8s/namespace.yaml',
   './.k8s/services/auth_config.yaml',
   './.k8s/services/analytics_config.yaml',
+  './.k8s/services/analytics_secrets.yaml',
   './.k8s/services/billing_config.yaml',
+  './.k8s/services/billing_secrets.yaml',
   './.k8s/services/task_tracker_config.yaml',
+  './.k8s/services/task_tracker_secrets.yaml',
   './.k8s/pg/pg_config.yaml',
   './.k8s/pg/pg_pv.yaml'])
 # apply databases adapters

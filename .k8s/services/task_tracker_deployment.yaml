@@ -36,6 +36,8 @@ spec:
         envFrom:
           - configMapRef:
               name: task-tracker-config
+          - secretRef:
+              name: task-tracker-secrets
         readinessProbe:
             httpGet:
               path: /

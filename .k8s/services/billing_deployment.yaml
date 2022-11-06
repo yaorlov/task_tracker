@@ -32,6 +32,8 @@ spec:
         envFrom:
           - configMapRef:
               name: billing-config
+          - secretRef:
+              name: billing-secrets
         readinessProbe:
             httpGet:
               path: /

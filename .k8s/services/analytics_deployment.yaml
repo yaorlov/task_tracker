@@ -32,6 +32,8 @@ spec:
         envFrom:
           - configMapRef:
               name: analytics-config
+          - secretRef:
+              name: analytics-secrets
         readinessProbe:
             httpGet:
               path: /
