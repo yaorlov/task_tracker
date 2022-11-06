@@ -8,4 +8,5 @@ data:
   AUTH_DATABASE_PASSWORD: ''
   RAILS_ENV: "development"
   RAILS_LOG_TO_STDOUT: "true"
-  AUTH_APP_URL: 'auth-svc.task-tracker.svc.cluster.local:31000'
+  AUTH_APP_PRIVATE_URL: 'auth-svc.task-tracker.svc.cluster.local:3000'
+  AUTH_APP_PUBLIC_URL: 'localhost:31000'

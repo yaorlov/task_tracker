@@ -8,8 +8,8 @@ module OmniAuth
       option :name, :keepa
 
       option :client_options, {
-        site: "http://#{ENV['AUTH_APP_URL']}/oauth/authorize",
-        authorize_url: "http://#{ENV['AUTH_APP_URL']}/oauth/authorize"
+        site: "http://#{ENV['AUTH_APP_PRIVATE_URL']}/oauth/authorize",
+        authorize_url: "http://#{ENV['AUTH_APP_PUBLIC_URL']}/oauth/authorize"
       }
 
       uid { raw_info['public_id'] }
