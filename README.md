@@ -69,5 +69,6 @@ To delete resources created by 'tilt up' run:
 tilt down
 ```
 To create database and run migrations trigger update on `auth-db-setup` resource in Tilt.
-To create users in database trigger update on `auth-db-seed` resource in Tilt.
+To create users and OAuth applicatinos in database trigger update on `auth-db-seed` resource in Tilt.
+You can find OAuth credentials in logs of `auth-db-seed`. Update `AUTH_KEY` and `AUTH_SECRET` envs in ConfigMap files for every service using these credentials.
 

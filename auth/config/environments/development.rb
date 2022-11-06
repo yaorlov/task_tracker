@@ -78,4 +78,11 @@ Rails.application.configure do
   config.web_console.permissions = '172.17.0.0/16'
 
   config.action_mailer.default_url_options = { host: 'localhost', port: ENV.fetch('RAILS_PORT') }
+
+  config.hosts = [
+    IPAddr.new("0.0.0.0/0"), # All IPv4 addresses.
+    IPAddr.new("::/0"),      # All IPv6 addresses.
+    "localhost",             # The localhost reserved domain.
+    'auth-svc.task-tracker.svc.cluster.local'  # Allow this to be addressed when running in containers via k8s
+  ]
 end

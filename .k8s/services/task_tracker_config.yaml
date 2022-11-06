@@ -6,5 +6,11 @@ metadata:
 data:
   PRIMARY_DATABASE_URL: "postgres://postgres:postgres@pg-svc.task-tracker/task_tracker_development" # <- pg-svc is the name of the service that exposes the Postgres pod
   AUTH_DATABASE_PASSWORD: ''
+  KAFKA_URL: 'kafka-broker:9092'
   RAILS_ENV: "development"
   RAILS_LOG_TO_STDOUT: "true"
+  AUTH_APP_PRIVATE_URL: 'auth-svc.task-tracker.svc.cluster.local:3000'
+  AUTH_APP_PUBLIC_URL: 'localhost:31000'
+  AUTH_KEY: 'PKrFV-OvpbB1hsGX-XDuM4WeIAYl4CRMpzGQ7wBaMA0' # <- uid from OAuth
+  AUTH_SECRET: 'J2oCiU34bHHXjPEsTTPFmseCuxtUhr0Q6jC2MaspQLk' # <- secret from OAuth
+

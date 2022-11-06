@@ -8,8 +8,10 @@ ARG DISTRO_NAME
 ARG PG_MAJOR=13
 ARG NODE_MAJOR=16
 ARG YARN_VERSION=1.22.17
+ARG KAFKA_URL
 
 ENV DOCKER_DEFAULT_PLATFORM=linux/amd64
+ENV KAFKA_URL=$KAFKA_URL
 
 # Common dependencies
 RUN apt-get update -qq \
@@ -20,6 +22,8 @@ RUN apt-get update -qq \
     less \
     git \
     shared-mime-info \
+    iputils-ping \
+    telnet \
   && apt-get clean \
   && rm -rf /var/cache/apt/archives/* \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
