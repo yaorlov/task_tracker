@@ -33,9 +33,7 @@ docker_build('billing',
 )
 docker_build('task_tracking',
    './task_tracking/',
-   build_args={
-    "KAFKA_URL": "kafka-broker:9092",
-   },
+   build_args={},
    dockerfile='./task_tracking/Dockerfile'
 )
 # -> end images

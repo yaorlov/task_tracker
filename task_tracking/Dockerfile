@@ -8,10 +8,8 @@ ARG DISTRO_NAME
 ARG PG_MAJOR=13
 ARG NODE_MAJOR=16
 ARG YARN_VERSION=1.22.17
-ARG KAFKA_URL
 
 ENV DOCKER_DEFAULT_PLATFORM=linux/amd64
-ENV KAFKA_URL=$KAFKA_URL
 
 # Common dependencies
 RUN apt-get update -qq \
@@ -76,4 +74,8 @@ RUN chown -R www-data:www-data /var/www
 
 USER www-data
 
-CMD ["/bin/bash", "-c", "bundle exec karafka server --daemon && bundle exec rails server -b 0.0.0.0 -p 5000"]
+CMD [\
+  "/bin/bash", \
+  "-c", \
+  "rm -f tmp/pids/karafka && bundle exec karafka server --daemon && bundle exec rails server -b 0.0.0.0 -p 5000"\
+]

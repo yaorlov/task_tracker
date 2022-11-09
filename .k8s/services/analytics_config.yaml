@@ -10,3 +10,4 @@ data:
   RAILS_LOG_TO_STDOUT: "true"
   AUTH_APP_PRIVATE_URL: 'auth-svc.task-tracker.svc.cluster.local:3000'
   AUTH_APP_PUBLIC_URL: 'localhost:31000'
+  KAFKA_URL: 'kafka-broker:9092'
