@@ -19,6 +19,7 @@ RUN apt-get update -qq \
     curl \
     less \
     git \
+    cron \
   && apt-get clean \
   && rm -rf /var/cache/apt/archives/* \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
@@ -73,5 +74,5 @@ USER www-data
 CMD [\
   "/bin/bash", \
   "-c", \
-  "rm -f tmp/pids/karafka && bundle exec karafka server --daemon && bundle exec rails server -b 0.0.0.0 -p 4000"\
+  "whenever --update-crontab --set environment='development' && rm -f tmp/pids/karafka && bundle exec karafka server --daemon && bundle exec rails server -b 0.0.0.0 -p 4000" \
 ]
