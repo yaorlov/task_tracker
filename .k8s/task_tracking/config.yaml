@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: task-tracker-config
+  name: task-tracking-config
   namespace: task-tracker
 data:
   PRIMARY_DATABASE_URL: "postgres://postgres:postgres@pg-svc.task-tracker/task_tracker_development" # <- pg-svc is the name of the service that exposes the Postgres pod

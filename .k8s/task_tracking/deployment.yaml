@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: task-tracker-deployment
+  name: task-tracking-deployment
   labels: # must match the service
-    app: task-tracker
+    app: task-tracking
   namespace: task-tracker
 spec:
   replicas: 1
   selector:
     matchLabels: # which pods are we deploying
-      app: task-tracker
+      app: task-tracking
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,14 +18,14 @@ spec:
   template:
     metadata:
       labels: # must match service and replicaset matchlabel
-        app: task-tracker
+        app: task-tracking
     spec:
       hostAliases:
         - ip: "10.96.0.16" # clusterIP of kafka service
           hostnames:
           - "kafka-broker"
       containers:
-      - name: task-tracker
+      - name: task-tracking
         image: task_tracking
         imagePullPolicy: Never # use local docker image
         resources:
@@ -35,9 +35,9 @@ spec:
           - containerPort: 5000
         envFrom:
           - configMapRef:
-              name: task-tracker-config
+              name: task-tracking-config
           - secretRef:
-              name: task-tracker-secrets
+              name: task-tracking-secrets
         readinessProbe:
             httpGet:
               path: /

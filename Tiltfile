@@ -1,13 +1,13 @@
 # apply configs and create volumes
 k8s_yaml([
   './.k8s/namespace.yaml',
-  './.k8s/services/auth_config.yaml',
-  './.k8s/services/analytics_config.yaml',
-  './.k8s/services/analytics_secrets.yaml',
-  './.k8s/services/billing_config.yaml',
-  './.k8s/services/billing_secrets.yaml',
-  './.k8s/services/task_tracker_config.yaml',
-  './.k8s/services/task_tracker_secrets.yaml',
+  './.k8s/auth/config.yaml',
+  './.k8s/analytics/config.yaml',
+  './.k8s/analytics/secrets.yaml',
+  './.k8s/billing/config.yaml',
+  './.k8s/billing/secrets.yaml',
+  './.k8s/task_tracking/config.yaml',
+  './.k8s/task_tracking/secrets.yaml',
   './.k8s/pg/pg_config.yaml',
   './.k8s/pg/pg_pv.yaml'])
 # apply databases adapters
@@ -46,8 +46,8 @@ k8s_resource('analytics-db-setup', resource_deps=['pg-deployment'])
 k8s_resource('analytics-deployment', resource_deps=['kafka-broker', 'analytics-db-setup'])
 k8s_resource('billing-db-setup', resource_deps=['pg-deployment'])
 k8s_resource('billing-deployment', resource_deps=['kafka-broker', 'billing-db-setup'])
-k8s_resource('task-tracker-db-setup', resource_deps=['pg-deployment'])
-k8s_resource('task-tracker-deployment', resource_deps=['kafka-broker', 'task-tracker-db-setup'])
+k8s_resource('task-tracking-db-setup', resource_deps=['pg-deployment'])
+k8s_resource('task-tracking-deployment', resource_deps=['kafka-broker', 'task-tracking-db-setup'])
 
 # apply processes
 k8s_yaml([
@@ -57,20 +57,20 @@ k8s_yaml([
   './.k8s/kafka/kafka_deployment.yaml',
   './.k8s/kafka/kafka_service.yaml',
   # services
-  './.k8s/services/auth_deployment.yaml',
-  './.k8s/services/auth_service.yaml',
-  './.k8s/services/analytics_deployment.yaml',
-  './.k8s/services/analytics_service.yaml',
-  './.k8s/services/billing_deployment.yaml',
-  './.k8s/services/billing_service.yaml',
-  './.k8s/services/task_tracker_deployment.yaml',
-  './.k8s/services/task_tracker_service.yaml',
+  './.k8s/auth/deployment.yaml',
+  './.k8s/auth/service.yaml',
+  './.k8s/analytics/deployment.yaml',
+  './.k8s/analytics/service.yaml',
+  './.k8s/billing/deployment.yaml',
+  './.k8s/billing/service.yaml',
+  './.k8s/task_tracking/deployment.yaml',
+  './.k8s/task_tracking/service.yaml',
   # db jobs
-  './.k8s/services/auth_db_setup.yaml',
-  './.k8s/services/auth_db_seed.yaml',
-  './.k8s/services/analytics_db_setup.yaml',
-  './.k8s/services/billing_db_setup.yaml',
-  './.k8s/services/task_tracker_db_setup.yaml'
+  './.k8s/auth/db_setup.yaml',
+  './.k8s/auth/db_seed.yaml',
+  './.k8s/analytics/db_setup.yaml',
+  './.k8s/billing/db_setup.yaml',
+  './.k8s/task_tracking/db_setup.yaml'
 ])
 
 # <- creates manual/auto action button in the Tilt GUI
@@ -88,7 +88,7 @@ local_resource('All pods',
     'auth-deployment',
     'analytics-deployment',
     'billing-deployment',
-    'task-tracker-deployment'
+    'task-tracking-deployment'
   ]
 )
 # ->
@@ -98,4 +98,4 @@ allow_k8s_contexts('minikube')
 k8s_resource('auth-deployment', port_forwards='31000')
 k8s_resource('analytics-deployment', port_forwards='32000')
 k8s_resource('billing-deployment', port_forwards='33000')
-k8s_resource('task-tracker-deployment', port_forwards='34000')
+k8s_resource('task-tracking-deployment', port_forwards='34000')

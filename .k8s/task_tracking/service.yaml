@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: task-tracker-svc
+  name: task-tracking-svc
   namespace: task-tracker
 spec:
   selector:
-    app: task-tracker
+    app: task-tracking
   type: NodePort
   #type: LoadBalancer on AWS
   ports:
