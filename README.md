@@ -59,16 +59,16 @@ Vanilla HTTP is used for sync communications. Kafka with schema registry is used
 Every microservice is using Postgres as the database. Please check the README files in every microservice directory for more details on database setup.
 
 ## K8s
-`minikube` and `tilt` are required to run services in local k8s cluster. After the dependencies are installed run:
+`minikube` and `tilt` are required to run services in local k8s cluster. After `minikube` and `tilt` dependencies are installed run:
 ```bash
 minikube start --kubernetes-version v1.24.3 --feature-gates=ServiceIPStaticSubrange=true
 tilt up
 ```
-To delete resources created by 'tilt up' run:
+This will start Tilt and run services defined in the `Tiltfile`.
+To delete resources created by `tilt up` run:
 ```bash
 tilt down
 ```
-To create database and run migrations trigger update on `auth-db-setup` resource in Tilt.
-To create users and OAuth applicatinos in database trigger update on `auth-db-seed` resource in Tilt.
-You can find OAuth credentials in logs of `auth-db-seed`. Update `AUTH_KEY` and `AUTH_SECRET` envs in ConfigMap files for every service using these credentials.
-
+### Seeding the database
+To create user accounts and OAuth applications in auth DB trigger update on `auth-db-seed` resource in Tilt UI. This will also stream `AccountsCreated` event, so the user accounts will be created in all services.
+If you are not using seeds and create OAuth applications from Doorkeeper UI, make sure to update key and secret in `secrets.yaml` files.
