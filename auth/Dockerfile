@@ -69,6 +69,11 @@ RUN yarn install --check-files
 
 COPY . .
 
+# Add a script to be executed every time the container starts
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
+
 RUN bundle exec rails assets:precompile
 
 RUN getent group www-data || groupadd --gid 1005 www-data \

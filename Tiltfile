@@ -40,14 +40,14 @@ docker_build('task_tracking',
 
 # deployments dependencies
 k8s_resource('kafka-broker', resource_deps=['zookeeper'])
-k8s_resource('auth-db-setup', resource_deps=['pg-deployment'])
-k8s_resource('auth-deployment', resource_deps=['kafka-broker', 'auth-db-setup'])
-k8s_resource('analytics-db-setup', resource_deps=['pg-deployment'])
-k8s_resource('analytics-deployment', resource_deps=['kafka-broker', 'analytics-db-setup'])
-k8s_resource('billing-db-setup', resource_deps=['pg-deployment'])
-k8s_resource('billing-deployment', resource_deps=['kafka-broker', 'billing-db-setup'])
-k8s_resource('task-tracking-db-setup', resource_deps=['pg-deployment'])
-k8s_resource('task-tracking-deployment', resource_deps=['kafka-broker', 'task-tracking-db-setup'])
+# k8s_resource('auth-db-setup', resource_deps=['pg-deployment'])
+k8s_resource('auth-deployment', resource_deps=['kafka-broker', 'pg-deployment'])
+# k8s_resource('analytics-db-setup', resource_deps=['pg-deployment'])
+k8s_resource('analytics-deployment', resource_deps=['kafka-broker', 'pg-deployment'])
+# k8s_resource('billing-db-setup', resource_deps=['pg-deployment'])
+k8s_resource('billing-deployment', resource_deps=['kafka-broker', 'pg-deployment'])
+# k8s_resource('task-tracking-db-setup', resource_deps=['pg-deployment'])
+k8s_resource('task-tracking-deployment', resource_deps=['kafka-broker', 'pg-deployment'])
 
 # apply processes
 k8s_yaml([
@@ -66,19 +66,15 @@ k8s_yaml([
   './.k8s/task_tracking/deployment.yaml',
   './.k8s/task_tracking/service.yaml',
   # db jobs
-  './.k8s/auth/db_setup.yaml',
   './.k8s/auth/db_seed.yaml',
-  './.k8s/analytics/db_setup.yaml',
-  './.k8s/billing/db_setup.yaml',
-  './.k8s/task_tracking/db_setup.yaml'
 ])
 
 # <- creates manual/auto action button in the Tilt GUI
 # migration
-k8s_resource('auth-db-seed', 
-   resource_deps=['auth-db-setup'],
-   trigger_mode=TRIGGER_MODE_MANUAL,
-   auto_init=False
+k8s_resource('auth-db-seed',
+  resource_deps=['pg-deployment'],
+  trigger_mode=TRIGGER_MODE_MANUAL,
+  auto_init=False
 )
 
 # auto/manual display pods in GUI
