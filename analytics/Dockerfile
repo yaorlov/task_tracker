@@ -78,5 +78,5 @@ USER www-data
 CMD [\
   "/bin/bash", \
   "-c", \
-  "rm -f tmp/pids/karafka && bundle exec karafka server --daemon && bundle exec rails server -b 0.0.0.0 -p 7000"\
+  "bundle exec karafka server --daemon && bundle exec rails server -b 0.0.0.0 -p 7000"\
 ]
