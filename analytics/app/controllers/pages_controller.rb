@@ -22,6 +22,6 @@ class PagesController < ApplicationController
   private
 
   def most_expensive_task(range)
-    Task.where(completed_at: range).order(complete_price: :desc).first
+    Task.where(completed_at: range).where.not(complete_price: nil).order(complete_price: :desc).first
   end
 end

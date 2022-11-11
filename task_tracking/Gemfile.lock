@@ -1,5 +1,7 @@
-PATH
-  remote: ../event_schema_registry/ruby
+GIT
+  remote: https://github.com/yaorlov/task_tracker_schema_registry.git
+  revision: 230b690e8eff788cec4c7bbc8f10d34faabb379a
+  branch: main
   specs:
     schema_registry (1)
       json-schema
@@ -66,8 +68,8 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.8.1)
+      public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     autoprefixer-rails (10.3.1.0)
       execjs (~> 2)
@@ -175,8 +177,8 @@ GEM
       reline (>= 0.2.7)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
-    json-schema (2.8.1)
-      addressable (>= 2.4)
+    json-schema (3.0.0)
+      addressable (>= 2.8)
     jwt (2.2.3)
     karafka (1.4.10)
       dry-configurable (~> 0.13)
@@ -201,7 +203,9 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
-    mimemagic (0.3.5)
+    mimemagic (0.3.10)
+      nokogiri (~> 1)
+      rake
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
     minitest (5.14.4)
@@ -242,7 +246,7 @@ GEM
       pry (~> 0.13.0)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
-    public_suffix (4.0.6)
+    public_suffix (5.0.0)
     puma (5.2.2)
       nio4r (~> 2.0)
     racc (1.5.2)

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-config
+  namespace: task-tracker
+data:
+  PRIMARY_DATABASE_URL: "postgres://postgres:postgres@pg-svc.task-tracker/auth_development" # <- pg-svc is the name of the service that exposes the Postgres pod
+  AUTH_DATABASE_PASSWORD: ''
+  KAFKA_URL: 'kafka-broker:9092'
+  RAILS_ENV: "development"
+  RAILS_PORT: '31000'
+  RAILS_LOG_TO_STDOUT: "true"
+  ANALYTICS_APP_PORT: '32000'
+  BILLING_APP_PORT: '33000'
+  TASK_TRACKING_APP_PORT: '34000'

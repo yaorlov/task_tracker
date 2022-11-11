@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: auth-db-seed
+  namespace: task-tracker
+spec:
+  template:
+    spec:
+      hostAliases:
+        - ip: "10.96.0.16" # clusterIP of kafka service
+          hostnames:
+          - "kafka-broker"
+      restartPolicy: Never
+      containers:
+        - name: auth-db-seed
+          image: auth
+          imagePullPolicy: IfNotPresent
+          command: ["bundle", "exec", "rails", "db:seed"]
+          envFrom:
+            - configMapRef:
+                name: auth-config

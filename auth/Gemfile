@@ -29,8 +29,8 @@ gem 'omniauth-oauth2', '~> 1.7'
 gem 'oauth2', '1.4.7'
 
 # Kafka
-gem 'schema_registry', path: '../event_schema_registry/ruby/'
-gem 'waterdrop', '~> 2.0'
+gem 'schema_registry', git: "https://github.com/yaorlov/task_tracker_schema_registry.git"
+gem 'waterdrop', '2.0.4'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false

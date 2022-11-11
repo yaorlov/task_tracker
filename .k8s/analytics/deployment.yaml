@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-deployment
+  labels: # must match the service
+    app: analytics
+  namespace: task-tracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels: # which pods are we deploying
+      app: analytics
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels: # must match service and replicaset matchlabel
+        app: analytics
+    spec:
+      hostAliases:
+        - ip: "10.96.0.16" # clusterIP of kafka service
+          hostnames:
+          - "kafka-broker"
+      containers:
+      - name: analytics
+        image: analytics
+        imagePullPolicy: Never # use local docker image
+        resources:
+          requests:
+            cpu: 500m
+        ports:
+          - containerPort: 7000
+        envFrom:
+          - configMapRef:
+              name: analytics-config
+          - secretRef:
+              name: analytics-secrets
+        readinessProbe:
+            httpGet:
+              path: /
+              port: 7000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 2

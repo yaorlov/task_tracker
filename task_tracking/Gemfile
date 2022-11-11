@@ -43,11 +43,12 @@ gem 'dry-monads', '~> 1.4'
 
 # Kafka gems
 gem 'karafka', '~> 1.4'
-gem 'schema_registry', path: '../event_schema_registry/ruby/'
+gem 'schema_registry', git: "https://github.com/yaorlov/task_tracker_schema_registry.git", branch: 'main' 
 gem 'waterdrop', '~> 1.4'
 
+gem 'dotenv-rails'
+
 group :development, :test do
-  gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'ffaker'
   gem 'pry-byebug'

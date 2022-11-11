@@ -18,7 +18,7 @@ class Account < ApplicationRecord
     producer = WaterDrop::Producer.new do |config|
       config.deliver = true
       config.kafka = {
-        'bootstrap.servers': 'localhost:9092',
+        'bootstrap.servers': ENV['KAFKA_URL'],
         'request.required.acks': 1
       }
     end
