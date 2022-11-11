@@ -5,7 +5,3 @@
 
 * Run server
 `bundle exec rails s`
-
-* How to run the test suite
-`bundle exec rspec`
-
